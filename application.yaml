@@ -11,7 +11,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: staging
+    path: staging/longhorn
     repoURL: https://github.com/navaneeth-dev/public-gitops
     targetRevision: HEAD
   syncPolicy:
