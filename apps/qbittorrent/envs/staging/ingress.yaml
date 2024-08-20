@@ -6,7 +6,7 @@ metadata:
   name: qbittorrent-ingress
 spec:
   rules:
-    - host: qbittorrent.staging.rizexor.com
+    - host: staging.rizexor.com
       http:
         paths:
         - path: /
@@ -18,6 +18,6 @@ spec:
                 number: 80
   tls:
   - hosts:
-    - '*.staging.rizexor.com'
+    - 'staging.rizexor.com'
     secretName: staging-rizexor-com-tls
 
