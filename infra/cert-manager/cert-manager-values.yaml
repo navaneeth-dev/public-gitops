@@ -1,0 +1,13 @@
+# Best practise for HA
+replicaCount: 2
+webhook:
+  replicaCount: 3
+cainjector:
+  replicaCount: 2
+
+crds:
+  enabled: true
+
+dns01RecursiveNameservers: "1.1.1.1:53,1.0.0.1:53"
+dns01RecursiveNameserversOnly: true
+
