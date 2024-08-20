@@ -3,18 +3,17 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: staging-rizexor-com-issuer
-  name: staging-longhorn-ingress
-  namespace: longhorn-system
+  name: qbittorrent-ingress
 spec:
   rules:
-    - host: longhorn.staging.rizexor.com
+    - host: qbittorrent.staging.rizexor.com
       http:
         paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name:  longhorn-frontend
+              name:  qbittorrent-svc
               port:
                 number: 80
   tls:
