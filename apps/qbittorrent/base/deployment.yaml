@@ -18,5 +18,5 @@ spec:
       - name: qbittorrent
         image: ghcr.io/hotio/qbittorrent:release
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 
