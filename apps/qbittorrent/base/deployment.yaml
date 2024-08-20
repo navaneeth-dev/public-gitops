@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: qbittorrent-deployment
   labels:
-    app: qbittorrent
+    app.kubernetes.io/name: qbittorrent
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: qbittorrent
+      app.kubernetes.io/name: qbittorrent
   template:
     metadata:
       labels:
-        app: qbittorrent
+        app.kubernetes.io/name: qbittorrent
     spec:
       containers:
       - name: qbittorrent
