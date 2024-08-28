@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attendance-monitoring-deployment
+  labels:
+    app.kubernetes.io/name: attendance-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: attendance-monitoring
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: attendance-monitoring
+    spec:
+      containers:
+      - name: redis
+        image: redis:7
+        ports:
+        - containerPort: 6379
+      - name: attendance-monitoring-cron
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
+      - name: attendance-monitoring-backend
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-backend:main
+        ports:
+        - containerPort: 8080
+
