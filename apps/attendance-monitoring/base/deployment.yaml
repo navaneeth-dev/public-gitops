@@ -30,9 +30,9 @@ spec:
         - name: C_FORCE_ROOT
           value: "true"
         - name: REDIS_URL
-          value: 'redis://redis'
+          value: 'redis://localhost'
         - name: POCKETBASE_URL
-          value: 'http://backend:8080'
+          value: 'http://localhost:8080'
         - name: ADMIN_EMAIL
           value: 'admin@rize.anonaddy.com'
         - name: ADMIN_PASSWORD
