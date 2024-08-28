@@ -21,10 +21,11 @@ spec:
         - containerPort: 6379
       - name: backend
         image: ghcr.io/navaneeth-dev/attendance-monitoring-backend:main
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
       - name: cron
-        image: ghcr.io/navaneeth-dev/attendance-monitoring-cron@sha256:b670a1873c77e900b7dd720e2796cf70d209faa215f5aa713358a211a6650e8a
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
         imagePullPolicy: Always
         env:
         - name: C_FORCE_ROOT
