@@ -23,21 +23,21 @@ spec:
         image: ghcr.io/navaneeth-dev/attendance-monitoring-backend:main
         ports:
         - containerPort: 8080
-        #- name: cron
-        #  image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
-        #  imagePullPolicy: Always
-        #  env:
-        #  - name: C_FORCE_ROOT
-        #    value: "true"
-        #  - name: REDIS_URL
-        #    value: 'redis://redis'
-        #  - name: POCKETBASE_URL
-        #    value: 'http://attendance-monitoring-backend:8080'
-        #  - name: ADMIN_EMAIL
-        #    value: 'admin@rize.anonaddy.com'
-        #  - name: ADMIN_PASSWORD
-        #    valueFrom:
-        #      secretKeyRef:
-        #        name: admin-password
-        #        key: foo
+      - name: cron
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
+        imagePullPolicy: Always
+        env:
+        - name: C_FORCE_ROOT
+          value: "true"
+        - name: REDIS_URL
+          value: 'redis://redis'
+        - name: POCKETBASE_URL
+          value: 'http://backend:8080'
+        - name: ADMIN_EMAIL
+          value: 'admin@rize.anonaddy.com'
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: admin-password
+              key: foo
 
