@@ -19,6 +19,11 @@ spec:
         image: redis:7
         ports:
         - containerPort: 6379
+      - name: frontend
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-frontend:main
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
       - name: backend
         image: ghcr.io/navaneeth-dev/attendance-monitoring-backend:main
         imagePullPolicy: Always
