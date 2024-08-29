@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: attendance-monitoring-pvc
 spec:
-  storageClassName: longhorn-static
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
