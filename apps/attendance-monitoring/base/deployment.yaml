@@ -9,6 +9,10 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: attendance-monitoring
+  volumes:
+    - name: attendance-monitoring-pv-storage
+      persistentVolumeClaim:
+        claimName: attendance-monitoring-pvc
   template:
     metadata:
       labels:
@@ -29,6 +33,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        volumeMounts:
+        - mountPath: "/pb/pb_data"
+          name: attendance-monitoring-pv-storage
       - name: cron
         image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
         imagePullPolicy: Always
