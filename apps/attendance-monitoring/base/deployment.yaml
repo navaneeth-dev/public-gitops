@@ -23,34 +23,29 @@ spec:
         image: redis:7
         ports:
         - containerPort: 6379
-        #- name: frontend
-        #  image: ghcr.io/navaneeth-dev/attendance-monitoring-frontend:main
-        #  imagePullPolicy: Always
-        #  ports:
-        #  - containerPort: 3000
-      - name: backend
-        image: ghcr.io/navaneeth-dev/attendance-monitoring-backend:main
+      - name: web
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-web:main
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
-        volumeMounts:
-        - mountPath: "/pb/pb_data"
-          name: attendance-monitoring-pv-storage
-      - name: cron
-        image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
-        imagePullPolicy: Always
-        env:
-        - name: C_FORCE_ROOT
-          value: "true"
-        - name: REDIS_URL
-          value: 'redis://localhost'
-        - name: POCKETBASE_URL
-          value: 'http://localhost:8080'
-        - name: ADMIN_EMAIL
-          value: 'admin@rize.anonaddy.com'
-        - name: ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: admin-password
-              key: foo
-
+        - containerPort: 8000
+        #  volumeMounts:
+        #  - mountPath: "/pb/pb_data"
+        #    name: attendance-monitoring-pv-storage
+        #      - name: cron
+        #        image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
+        #        imagePullPolicy: Always
+        #        env:
+        #        - name: C_FORCE_ROOT
+        #          value: "true"
+        #        - name: REDIS_URL
+        #          value: 'redis://localhost'
+        #        - name: POCKETBASE_URL
+        #          value: 'http://localhost:8080'
+        #        - name: ADMIN_EMAIL
+        #          value: 'admin@rize.anonaddy.com'
+        #        - name: ADMIN_PASSWORD
+        #          valueFrom:
+        #            secretKeyRef:
+        #              name: admin-password
+        #              key: foo
+        #
