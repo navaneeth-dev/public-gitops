@@ -28,6 +28,12 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
+        env:
+          - name: DJANGO_DEBUG
+            value: "true"
+          - name: SECRET_KEY
+            value: '$#GFHhui45khfdjhgblkshsSfHllldfHYUN#EjgksEHm,GBFJK'
+
         #  volumeMounts:
         #  - mountPath: "/pb/pb_data"
         #    name: attendance-monitoring-pv-storage
