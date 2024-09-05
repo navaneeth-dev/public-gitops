@@ -26,6 +26,12 @@ spec:
         volumeMounts:
         - name: attendance-monitoring-pv-storage
           mountPath: "/var/lib/postgresql/data"
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: admin-password
+                key: foo
       - name: web
         image: ghcr.io/navaneeth-dev/attendance-monitoring-web:main
         imagePullPolicy: Always
