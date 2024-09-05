@@ -30,7 +30,7 @@ spec:
         - containerPort: 8000
         env:
           - name: DJANGO_DEBUG
-            value: "true"
+            value: "false"
           - name: SECRET_KEY
             value: '$#GFHhui45khfdjhgblkshsSfHllldfHYUN#EjgksEHm,GBFJK'
 
