@@ -19,10 +19,13 @@ spec:
           persistentVolumeClaim:
             claimName: attendance-monitoring-pvc
       containers:
-      - name: redis
-        image: redis:7
+      - name: postgres
+        image: postgres:16
         ports:
-        - containerPort: 6379
+        - containerPort: 5432
+        volumeMounts:
+        - name: attendance-monitoring-pv-storage
+          mountPath: "/var/lib/postgresql/data"
       - name: web
         image: ghcr.io/navaneeth-dev/attendance-monitoring-web:main
         imagePullPolicy: Always
@@ -63,24 +66,3 @@ spec:
                 name: web-secrets
                 key: AWS_S3_CUSTOM_DOMAIN
 
-        #  volumeMounts:
-        #  - mountPath: "/pb/pb_data"
-        #    name: attendance-monitoring-pv-storage
-        #      - name: cron
-        #        image: ghcr.io/navaneeth-dev/attendance-monitoring-cron:main
-        #        imagePullPolicy: Always
-        #        env:
-        #        - name: C_FORCE_ROOT
-        #          value: "true"
-        #        - name: REDIS_URL
-        #          value: 'redis://localhost'
-        #        - name: POCKETBASE_URL
-        #          value: 'http://localhost:8080'
-        #        - name: ADMIN_EMAIL
-        #          value: 'admin@rize.anonaddy.com'
-        #        - name: ADMIN_PASSWORD
-        #          valueFrom:
-        #            secretKeyRef:
-        #              name: admin-password
-        #              key: foo
-        #
