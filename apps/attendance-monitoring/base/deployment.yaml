@@ -19,6 +19,10 @@ spec:
           persistentVolumeClaim:
             claimName: attendance-monitoring-pvc
       containers:
+      - name: redis
+        image: redis:7
+        ports:
+        - containerPort: 6379
       - name: postgres
         image: postgres:16
         ports:
@@ -33,43 +37,41 @@ spec:
               secretKeyRef:
                 name: admin-password
                 key: foo
+
       - name: web
         image: ghcr.io/navaneeth-dev/attendance-monitoring-web:main
         imagePullPolicy: Always
         ports:
-        - containerPort: 8000
+        - containerPort: 8080
+        command: >
+          bash -c "python3 manage.py migrate
+          && python3 -m gunicorn onlyVels.asgi:application -k uvicorn.workers.UvicornWorker -b :8080"
         env:
-          - name: DEBUG
-            value: "false"
-          - name: SECRET_KEY
+          - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: web-secrets
-                key: SECRET_KEY
-
-          - name: AWS_STORAGE_BUCKET_NAME
+                name: admin-password
+                key: foo
+        envFrom:
+          - configMapRef:
+              name: web-config
+          - secretRef:
+              name: web-secrets
+      - name: celery
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-web:main
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        command: python3 -m celery -A onlyVels beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+        env:
+          - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: web-secrets
-                key: AWS_STORAGE_BUCKET_NAME
-          - name: AWS_S3_ACCESS_KEY_ID 
-            valueFrom:
-              secretKeyRef:
-                name: web-secrets
-                key: AWS_S3_ACCESS_KEY_ID
-          - name: AWS_S3_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: web-secrets
-                key: AWS_S3_SECRET_ACCESS_KEY
-          - name: AWS_S3_ENDPOINT_URL
-            valueFrom:
-              secretKeyRef:
-                name: web-secrets
-                key: AWS_S3_ENDPOINT_URL
-          - name: AWS_S3_CUSTOM_DOMAIN
-            valueFrom:
-              secretKeyRef:
-                name: web-secrets
-                key: AWS_S3_CUSTOM_DOMAIN
+                name: admin-password
+                key: foo
+        envFrom:
+          - configMapRef:
+              name: web-config
+          - secretRef:
+              name: web-secrets
 
