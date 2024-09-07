@@ -4,8 +4,8 @@ metadata:
   name: web-config
 data:
   DEBUG: "false"
-  POSTGRES_HOST: "postgres"
+  POSTGRES_HOST: "localhost"
   POSTGRES_USER: "postgres"
   POSTGRES_NAME: "postgres"
-  CELERY_BROKER_URL: "redis://redis"
+  CELERY_BROKER_URL: "redis://localhost"
 
