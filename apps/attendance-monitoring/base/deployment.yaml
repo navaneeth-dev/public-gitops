@@ -43,9 +43,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
-        command: >
-          bash -c "python3 manage.py migrate
-          && python3 -m gunicorn onlyVels.asgi:application -k uvicorn.workers.UvicornWorker -b :8080"
+        command: ["/bin/sh", "-c"]
+        args: ["python3 manage.py migrate
+          && python3 -m gunicorn onlyVels.asgi:application -k uvicorn.workers.UvicornWorker -b :8080"]
         env:
           - name: POSTGRES_PASSWORD
             valueFrom:
@@ -60,9 +60,8 @@ spec:
       - name: celery
         image: ghcr.io/navaneeth-dev/attendance-monitoring-web:main
         imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        command: python3 -m celery -A onlyVels beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+        command: ["/bin/sh", "-c"]
+        args: [python3 -m celery -A onlyVels beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler]
         env:
           - name: POSTGRES_PASSWORD
             valueFrom:
