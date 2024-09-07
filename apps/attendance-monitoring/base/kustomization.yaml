@@ -7,4 +7,5 @@ resources:
 - pvc.yaml
 - sealed-web-secrets.yaml
 - sealed-admin-password.json
+- web-configmap.yaml
 
