@@ -73,4 +73,20 @@ spec:
               name: web-config
           - secretRef:
               name: web-secrets
+      - name: worker
+        image: ghcr.io/navaneeth-dev/attendance-monitoring-web:main
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args: [python3 -m celery -A onlyVels worker -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler]
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: admin-password
+                key: foo
+        envFrom:
+          - configMapRef:
+              name: web-config
+          - secretRef:
+              name: web-secrets
 
