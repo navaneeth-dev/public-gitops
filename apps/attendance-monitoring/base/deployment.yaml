@@ -32,6 +32,8 @@ spec:
           mountPath: "/var/lib/postgresql/data"
           subPath: "pg_data"
         env:
+          - name: TZ
+            value: "Asia/Kolkata"
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:

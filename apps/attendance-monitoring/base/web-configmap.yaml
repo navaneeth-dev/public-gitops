@@ -8,4 +8,5 @@ data:
   POSTGRES_USER: "postgres"
   POSTGRES_NAME: "postgres"
   CELERY_BROKER_URL: "redis://localhost"
+  TZ: "Asia/Kolkata"
 
