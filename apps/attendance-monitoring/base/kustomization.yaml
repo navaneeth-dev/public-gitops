@@ -5,6 +5,5 @@ resources:
 - deployment.yaml
 - service.yaml
 - pvc.yaml
-- sealed-admin-password.json
 - web-configmap.yaml
 
