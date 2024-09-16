@@ -5,6 +5,7 @@ resources:
 - ../../base
 - ingress.yaml
 - sealed-web-secrets.yaml
+- sealed-admin-password.json
 
 #patchesStrategicMerge:
 #- deployment.yml
