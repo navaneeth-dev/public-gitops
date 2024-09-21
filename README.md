@@ -1,6 +1,5 @@
-### public-gitops
-
-Production public servics GitOps Kubernetes HA.
+<h1 align="center">public-gitops</h1>
+<p align="center">Production public servics GitOps Kubernetes HA.</p>
 
 ![ArgoCD](https://github.com/navaneeth-dev/public-gitops/blob/main/assets/argocd.png)
 
@@ -23,4 +22,3 @@ curl -sfL https://get.k3s.io | K3S_TOKEN=TOKEN_HERE sh -s - server \
     --tls-san=10.0.0.2 \
     --cluster-cidr=10.42.0.0/16,fd12:cafe:42::/56 --service-cidr=10.43.0.0/16,fd12:cafe:43::/112
 ```
-
