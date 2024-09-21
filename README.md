@@ -1,5 +1,5 @@
 <h1 align="center">public-gitops</h1>
-<p align="center">Production public servics GitOps Kubernetes HA.</p>
+<p align="center">Production grade HA Kubernetes cluster for public servics using GitOps.</p>
 
 ![ArgoCD](https://github.com/navaneeth-dev/public-gitops/blob/main/assets/argocd.png)
 
