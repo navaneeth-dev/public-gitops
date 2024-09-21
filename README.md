@@ -1,6 +1,10 @@
-public-gitops
+### public-gitops
 
 Production public servics GitOps Kubernetes HA.
+
+![ArgoCD](https://github.com/navaneeth-dev/public-gitops/blob/main/assets/argocd.png)
+
+## Getting Started
 
 1st Server Node:
 
