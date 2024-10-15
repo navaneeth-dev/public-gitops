@@ -13,4 +13,6 @@ data:
 
   OCTANE_SERVER: frankenphp
 
+  WITH_SCHEDULER: "true"
+
   ATTENDANCE_MICROSERVICE_URL: localhost:8080
