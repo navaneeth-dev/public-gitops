@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: web-config
 data:
-  APP_KEY: 'base64:OFcax92P3rPWmTB41lFhcnpIV2P530qg17w6jBPZpj0='
   APP_TIMEZONE: Asia/Kolkata
 
   DB_CONNECTION: pgsql

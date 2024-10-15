@@ -33,39 +33,27 @@ spec:
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: admin-password
-                key: foo
+                name: laravel
+                key: POSTGRES_PASSWORD
 
       - name: laravel
         image: ghcr.io/navaneeth-dev/attendance-v2:0.0.1
         ports:
         - containerPort: 8000
-        env:
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: admin-password
-                key: foo
         envFrom:
           - configMapRef:
               name: web-config
           - secretRef:
-              name: web-secrets
+              name: laravel
 
       - name: worker
         image: ghcr.io/navaneeth-dev/attendance-v2:0.0.1
         command: php artisan queue:work
-        env:
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: admin-password
-                key: foo
         envFrom:
           - configMapRef:
               name: web-config
           - secretRef:
-              name: web-secrets
+              name: laravel
 
       - name: microservice
         image: ghcr.io/navaneeth-dev/attendance-microservice:main
