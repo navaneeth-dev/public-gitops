@@ -48,7 +48,8 @@ spec:
 
       - name: worker
         image: ghcr.io/navaneeth-dev/attendance-v2:0.0.1
-        command: php artisan queue:work
+        command: ["php"]
+        args: ["artisan", "queue:work"]
         envFrom:
           - configMapRef:
               name: web-config
