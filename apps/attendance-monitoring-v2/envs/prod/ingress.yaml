@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: attendance-monitoring-ingress
+spec:
+  rules:
+    - host: 'attendance.prod.rizexor.com'
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name:  attendance-monitoring-svc
+              port:
+                number: 80
+  tls:
+  - hosts:
+    - 'prod.rizexor.com'
+    secretName: prod-rizexor-com-tls
+

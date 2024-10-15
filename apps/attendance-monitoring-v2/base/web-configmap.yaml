@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  APP_KEY: 'base64:OFcax92P3rPWmTB41lFhcnpIV2P530qg17w6jBPZpj0='
+  APP_TIMEZONE: Asia/Kolkata
+
+  DB_CONNECTION: pgsql
+  DB_HOST: postgres
+  DB_PORT: 5432
+  DB_DATABASE: postgres
+  DB_USERNAME: postgres
+
+  OCTANE_SERVER: frankenphp
+
+  ATTENDANCE_MICROSERVICE_URL: localhost:8080
