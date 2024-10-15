@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: attendance-monitoring-ingress
+  name: ingress
 spec:
   rules:
-    - host: 'attendance.staging.rizexor.com'
+    - host: 'attend.staging.rizexor.com'
       http:
         paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name:  attendance-monitoring-svc
+              name:  svc
               port:
                 number: 80
   tls:
