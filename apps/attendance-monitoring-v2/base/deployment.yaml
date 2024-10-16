@@ -34,7 +34,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: laravel
-                key: POSTGRES_PASSWORD
+                key: DB_PASSWORD
 
       - name: laravel
         image: ghcr.io/navaneeth-dev/attendance-v2:0.0.3
