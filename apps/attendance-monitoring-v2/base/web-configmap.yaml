@@ -4,15 +4,12 @@ metadata:
   name: web-config
 data:
   APP_TIMEZONE: Asia/Kolkata
+  APP_URL: https://attend.staging.rizexor.com
 
   DB_CONNECTION: pgsql
   DB_HOST: localhost
   DB_PORT: "5432"
   DB_DATABASE: postgres
   DB_USERNAME: postgres
-
-  OCTANE_SERVER: frankenphp
-
-  WITH_SCHEDULER: "true"
 
   ATTENDANCE_MICROSERVICE_URL: localhost:8080
