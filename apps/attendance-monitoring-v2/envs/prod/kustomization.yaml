@@ -4,12 +4,8 @@ kind: Kustomization
 resources:
 - ../../base
 - ingress.yaml
-- sealed-web-secrets.yaml
-- sealed-admin-password.json
+- sealed-laravel.yaml
 
-##patchesStrategicMerge:
-##- deployment.yml
-##- version.yml
-##- replicas.yml
-##- settings.yml
-#
+patchesStrategicMerge:
+- web-configmap.yaml
+
