@@ -6,6 +6,8 @@ data:
   APP_TIMEZONE: Asia/Kolkata
   APP_URL: https://attend.staging.rizexor.com
 
+  OCTANE_HTTPS: "true"
+
   DB_CONNECTION: pgsql
   DB_HOST: localhost
   DB_PORT: "5432"
