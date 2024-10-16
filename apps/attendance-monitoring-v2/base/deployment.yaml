@@ -37,7 +37,7 @@ spec:
                 key: POSTGRES_PASSWORD
 
       - name: laravel
-        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.1
+        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.1@sha256:4037fbaf936590db89cdbceab64aff4d3426fa875df88da19e7938010f98d9e8
         ports:
         - containerPort: 8000
         envFrom:
@@ -47,7 +47,7 @@ spec:
               name: laravel
 
       - name: worker
-        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.1
+        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.1@sha256:4037fbaf936590db89cdbceab64aff4d3426fa875df88da19e7938010f98d9e8
         command: ["php"]
         args: ["artisan", "queue:work"]
         envFrom:
