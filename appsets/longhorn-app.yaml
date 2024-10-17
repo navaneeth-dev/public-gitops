@@ -16,4 +16,23 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
-
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/namespace-wide: "true"
+  creationTimestamp: null
+  name: aws-secret
+  namespace: longhorn-system
+spec:
+  encryptedData:
+    AWS_ACCESS_KEY_ID: AgB1rYDqB+M4t/FpTjgn7a4QnPMojPWsAldo7EGj16UcrDJJtQqJfAIM/jCxZiLdhrfz3VAFPxVGwjUELQ6VrrhtMX/RREFDysg4KehtUggzZCS0ku7/PIYs6IobgOmFmVmc77ZIuZzKb7kAsSWTeJgpMstjTQhybMkncXgt99qvuuutn0XvfYBAkHTO1MXshD1eJVfZpdpdZY0Ma20Shnz9ntj39qXnsNzK6CheFI9oC7PV3pW2KHSNevgpYEWiQvXMvNYMn74hpEQdGjr+t2wDMtYAQnjo9WWqFYfYqgxHUYFVXZqAsX84KAOSmrZPsxhwWsZJz30E8CAtZ5ks6WkWeb2uT03d4Fl4xbeCKqXS9I/QnF7dpvnFxYxja7VIX5Z1giKLt1yA3Q/chMiJv1ptrCe6uoD8I4hNdM0qNmya5cbUd7n0eg3u5MAJJyJI3/EEQ/TTy4zaK+rPlJiYNz/LGDwNyOSecCnssJrRWsrBZKtrBiJiaMd97XR3eNtYQqBzvJZ3bl1ta6SXckQG38pTmtPqaC+VwEGDq9iGZ44BFkzhO51yJy4/jM2+6nNumiGoSMfWgYbaK42Cj7LDkhInZjRiXIanAWlG959djaL7NQYa4WAVgzHLScc3to9qS3BmXNoTcP0vr6FH24DYPaTbC5JptJqXMo6h1PL+NCBFsEZhCrqu/Mmo8lhDc2EvC7wKHdVw8wuRJGk5nzJ1pyalAcZBfNE1+5ov
+    AWS_SECRET_ACCESS_KEY: AgDE+WEaIScAKc3Lvv5qpGHQyQhm9Ebrq5VJs2lgHnJug2sv1YUNGKxlfoMQ+COO7Q/QshWJY3zICyuxqNtI+B7O1rBLdmTdHfXE9r9caUWgRbtebsB1lJVzh9XEwTvwcmYXE5Gvuk+nEcXSlSqfi51jcXmqH6KS/pvT3/+Znk4EXWq8kAxOCVYRHK0xjA3/och260SPprHfePkFQ95E6PdWUWfHwYJcNaw74BNiUtV7evyCklZhVvoO9sZZHVgBn2xPEsHqzGvmBV1edTjnwI9i5B2k6zVohh0THZ40Nf6Nkq907GMJizD1GXxMTNe/auVstuAY4NIV9Ua/4HskfJ+tdyP5DfN3Jy6QXckBBY9yksivcz+SwqYfGqpOiHwj+mIV+nlkyAFF35uv9mGON0d/ByEXFBkZ7K1yFwGXfqytr1jrzxBhBC6oLhl6fAGdY4QwMlTe3pkaMxxXpAM1D0dktHsnrR4JvwsFedVW+KrT9eLiRj4LiSc+GllM3xgRJZYzzcxFWUjpvdVFSIILbNl5wSwtf7CoYrU5wwivVjtcohOSBKvy8Fwbu2YzhG/QFgZSTz4wZtQZoQ2zvxLAiiHdpKCXoJ/ux7KEWdWa5IO6IHtd4SWCv8Tm01K30EvkdHng85tOdk7x0PLypMOWqV4gIEcmGR2ZoglvgpblXMUVMSsEqteGrZjOInMjl7Bq90wP/V+SQtqdJK1qKTiX8yEGSxyDTQRZYCpY1JYV+jM1
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/namespace-wide: "true"
+      creationTimestamp: null
+      name: aws-secret
+      namespace: longhorn-system
