@@ -27,6 +27,8 @@ spec:
     repoURL: https://github.com/navaneeth-dev/public-gitops.git
     targetRevision: HEAD
     path: cluster-wide
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
