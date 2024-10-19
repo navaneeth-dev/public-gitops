@@ -37,7 +37,7 @@ spec:
                 key: DB_PASSWORD
 
       - name: laravel
-        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.3
+        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.5
         ports:
         - containerPort: 8000
         envFrom:
@@ -47,7 +47,7 @@ spec:
               name: laravel
 
       - name: worker
-        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.3
+        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.5
         command: ["php"]
         args: ["artisan", "queue:work"]
         envFrom:
@@ -56,5 +56,15 @@ spec:
           - secretRef:
               name: laravel
 
+      - name: scheduler
+        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.5
+        command: ["/usr/bin/supercronic"]
+        args: ["-overlapping", "/etc/supercronic/laravel"]
+        envFrom:
+          - configMapRef:
+              name: web-config
+          - secretRef:
+              name: laravel
+
       - name: microservice
-        image: ghcr.io/navaneeth-dev/attendance-microservice:main
+        image: ghcr.io/navaneeth-dev/attendance-microservice:v0.0.5
