@@ -67,4 +67,4 @@ spec:
               name: laravel
 
       - name: microservice
-        image: ghcr.io/navaneeth-dev/attendance-microservice:v0.0.5
+        image: ghcr.io/navaneeth-dev/attendance-microservice:0.0.5
