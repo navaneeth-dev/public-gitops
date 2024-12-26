@@ -5,6 +5,7 @@ metadata:
 data:
   APP_TIMEZONE: Asia/Kolkata
   APP_URL: https://attend.staging.rizexor.com
+  APP_ENV: staging
 
   OCTANE_HTTPS: "true"
 

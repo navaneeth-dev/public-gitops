@@ -4,4 +4,5 @@ metadata:
   name: web-config
 data:
   APP_URL: https://attend.prod.rizexor.com
+  APP_ENV: production
 

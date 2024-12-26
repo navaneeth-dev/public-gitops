@@ -5,6 +5,7 @@ resources:
 - ../../base
 - ingress.yaml
 - sealed-laravel.yaml
+- sentry.yaml
 
 patchesStrategicMerge:
 - web-configmap.yaml
