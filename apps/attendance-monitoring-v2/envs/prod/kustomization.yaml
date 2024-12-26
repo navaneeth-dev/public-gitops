@@ -5,8 +5,7 @@ resources:
 - ../../base
 - ingress.yaml
 - sealed-laravel.yaml
-- sentry.yaml
 
 patches:
-- web-configmap.yaml
+  - path: web-configmap.yaml
 
