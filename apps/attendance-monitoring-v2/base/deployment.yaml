@@ -37,7 +37,7 @@ spec:
                 key: DB_PASSWORD
 
       - name: laravel
-        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.6
+        image: ghcr.io/onlyvels/attendance-monitoring:0.0.7
         ports:
         - containerPort: 8000
         envFrom:
@@ -47,7 +47,7 @@ spec:
               name: laravel
 
       - name: worker
-        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.6
+        image: ghcr.io/onlyvels/attendance-monitoring:0.0.7
         command: ["php"]
         args: ["artisan", "queue:work"]
         envFrom:
@@ -57,7 +57,7 @@ spec:
               name: laravel
 
       - name: scheduler
-        image: ghcr.io/navaneeth-dev/attendance-v2:0.0.6
+        image: ghcr.io/onlyvels/attendance-monitoring:0.0.7
         command: ["/usr/bin/supercronic"]
         args: ["-overlapping", "/etc/supercronic/laravel"]
         envFrom:
