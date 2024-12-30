@@ -6,6 +6,7 @@ data:
   APP_TIMEZONE: Asia/Kolkata
   APP_URL: https://attend.staging.rizexor.com
   APP_ENV: staging
+  APP_NAME: OnlyVels
 
   OCTANE_HTTPS: "true"
 
