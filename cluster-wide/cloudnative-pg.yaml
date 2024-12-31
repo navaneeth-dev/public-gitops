@@ -6,13 +6,9 @@ metadata:
 spec:
   project: default
   sources:
-    - chart: cnpg
+    - chart: cnpg/cloudnative-pg
       repoURL: https://cloudnative-pg.github.io/charts
       targetRevision: 0.23.0
-      helm:
-        values: |
-          preUpgradeChecker:
-            jobEnabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: cnpg-system
