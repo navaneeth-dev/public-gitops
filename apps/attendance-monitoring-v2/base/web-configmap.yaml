@@ -7,6 +7,7 @@ data:
   APP_URL: https://attend.staging.rizexor.com
   APP_ENV: staging
   APP_NAME: OnlyVels
+  APP_VERSION: '0.0.9'
 
   OCTANE_HTTPS: "true"
 
