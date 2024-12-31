@@ -7,4 +7,5 @@ resources:
 - service.yaml
 - pvc.yaml
 - web-configmap.yaml
+- cluster.yaml
 
