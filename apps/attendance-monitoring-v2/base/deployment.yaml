@@ -22,6 +22,11 @@ spec:
         - name: migrate
           image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
           command: ["php", "artisan", "migrate", "--force"]
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - secretRef:
+                name: laravel
       containers:
       - name: postgres
         image: postgres:17
