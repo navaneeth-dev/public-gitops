@@ -18,6 +18,10 @@ spec:
         - name: pv-storage
           persistentVolumeClaim:
             claimName: pvc
+      initContainers:
+        - name: migrate
+          image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
+          command: ["php", "artisan", "migrate", "--force"]
       containers:
       - name: postgres
         image: postgres:17
@@ -37,7 +41,7 @@ spec:
                 key: DB_PASSWORD
 
       - name: laravel
-        image: ghcr.io/onlyvels/attendance-monitoring:0.1.0
+        image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
         ports:
         - containerPort: 8000
         envFrom:
@@ -47,7 +51,7 @@ spec:
               name: laravel
 
       - name: worker
-        image: ghcr.io/onlyvels/attendance-monitoring:0.1.0
+        image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
         command: ["php"]
         args: ["artisan", "queue:work"]
         envFrom:
@@ -57,7 +61,7 @@ spec:
               name: laravel
 
       - name: scheduler
-        image: ghcr.io/onlyvels/attendance-monitoring:0.1.0
+        image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
         command: ["/usr/bin/supercronic"]
         args: ["-overlapping", "/etc/supercronic/laravel"]
         envFrom:
