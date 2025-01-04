@@ -11,10 +11,10 @@ data:
   OCTANE_HTTPS: "true"
 
   DB_CONNECTION: pgsql
-  DB_HOST: localhost
+  DB_HOST: attendance-v2-cluster-rw
   DB_PORT: "5432"
-  DB_DATABASE: postgres
-  DB_USERNAME: postgres
+  DB_DATABASE: app
+  DB_USERNAME: app
 
   ATTENDANCE_MICROSERVICE_URL: localhost:8080
 
