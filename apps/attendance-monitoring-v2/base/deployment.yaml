@@ -31,7 +31,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: web-config
-            - configMapRef:
+            - secretRef:
                 name: laravel
             - secretRef:
                 name: attendance-v2-cluster-app
@@ -47,7 +47,7 @@ spec:
               name: attendance-v2-cluster-app
               key: password
         envFrom:
-          - configMapRef:
+          - secretRef:
               name: laravel
           - configMapRef:
               name: web-config
@@ -65,7 +65,7 @@ spec:
               name: attendance-v2-cluster-app
               key: password
         envFrom:
-          - configMapRef:
+          - secretRef:
               name: laravel
           - configMapRef:
               name: web-config
@@ -83,7 +83,7 @@ spec:
               name: attendance-v2-cluster-app
               key: password
         envFrom:
-          - configMapRef:
+          - secretRef:
               name: laravel
           - configMapRef:
               name: web-config
