@@ -8,4 +8,5 @@ resources:
 - pvc.yaml
 - web-configmap.yaml
 - cluster.yaml
+- cluster-backup-schedule.yaml
 
