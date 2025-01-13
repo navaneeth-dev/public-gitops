@@ -14,10 +14,6 @@ spec:
       labels:
         app.kubernetes.io/name: attendance-v2
     spec:
-      volumes:
-        - name: pv-storage
-          persistentVolumeClaim:
-            claimName: pvc
       initContainers:
         - name: migrate
           image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
