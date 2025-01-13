@@ -9,4 +9,5 @@ resources:
 - web-configmap.yaml
 - cluster.yaml
 - cluster-backup-schedule.yaml
+- sealed-aws-secret.yaml
 

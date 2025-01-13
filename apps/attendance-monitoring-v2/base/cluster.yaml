@@ -12,8 +12,8 @@ spec:
       endpointURL: 's3.eu-central-003.backblazeb2.com'
       s3Credentials:
         accessKeyId:
-          name: attendance-aws-secret
+          name: attendance-v2-aws-secret
           key: AWS_ACCESS_KEY_ID
         secretAccessKey:
-          name: attendance-aws-secret
+          name: attendance-v2-aws-secret
           key: AWS_SECRET_ACCESS_KEY
