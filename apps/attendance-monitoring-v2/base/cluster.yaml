@@ -9,7 +9,7 @@ spec:
   backup:
     barmanObjectStore:
       destinationPath: "s3://attendance-monitoring/staging/"
-      endpointURL: 's3.eu-central-003.backblazeb2.com'
+      endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
       s3Credentials:
         accessKeyId:
           name: attendance-v2-aws-secret
