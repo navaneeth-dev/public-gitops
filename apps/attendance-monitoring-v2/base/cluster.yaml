@@ -14,6 +14,8 @@ spec:
         accessKeyId:
           name: aws-secret
           key: AWS_ACCESS_KEY_ID
+          namespace: longhorn-system
         secretAccessKey:
           name: aws-secret
           key: AWS_SECRET_ACCESS_KEY
+          namespace: longhorn-system
