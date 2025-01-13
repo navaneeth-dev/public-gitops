@@ -8,4 +8,5 @@ resources:
 
 patches:
   - path: web-configmap.yaml
+  - path: cluster.yaml
 

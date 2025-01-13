@@ -8,7 +8,7 @@ spec:
     size: 1Gi
   backup:
     barmanObjectStore:
-      destinationPath: "s3://attendance-monitoring@apac/"
+      destinationPath: "s3://attendance-monitoring/staging/"
       endpointURL: 's3.eu-central-003.backblazeb2.com'
       s3Credentials:
         accessKeyId:
