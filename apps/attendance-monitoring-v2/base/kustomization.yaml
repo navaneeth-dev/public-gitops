@@ -5,7 +5,6 @@ namePrefix: attendance-v2-
 resources:
 - deployment.yaml
 - service.yaml
-- pvc.yaml
 - web-configmap.yaml
 - cluster.yaml
 - cluster-backup-schedule.yaml
