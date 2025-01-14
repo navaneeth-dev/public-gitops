@@ -12,7 +12,7 @@ spec:
     size: 1Gi
   backup:
     volumeSnapshot:
-       className: attendance-volume-snapshots
+       className: longhorn
     barmanObjectStore:
       destinationPath: "s3://attendance-monitoring/staging/"
       endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
