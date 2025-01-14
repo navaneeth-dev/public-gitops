@@ -14,7 +14,7 @@ spec:
     volumeSnapshot:
        className: longhorn
     barmanObjectStore:
-      destinationPath: "s3://attendance-monitoring/staging/"
+      destinationPath: "s3://longhorn-oracle/staging/"
       endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
       wal:
         compression: gzip
