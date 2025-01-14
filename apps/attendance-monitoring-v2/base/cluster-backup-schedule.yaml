@@ -6,5 +6,6 @@ spec:
   schedule: "0 0 0 * * *"
   immediate: true
   backupOwnerReference: cluster
+  method: volumeSnapshot
   cluster:
     name: attendance-v2-cluster
