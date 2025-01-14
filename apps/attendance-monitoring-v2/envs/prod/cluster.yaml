@@ -3,6 +3,7 @@ kind: Cluster
 metadata:
   name: cluster
 spec:
+  instances: 3
   backup:
     barmanObjectStore:
       destinationPath: "s3://attendance-monitoring/prod/"
