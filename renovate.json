@@ -5,5 +5,8 @@
   ],
   "kubernetes": {
     "fileMatch": [".*.yaml$"]
+  },
+  "helmv3": {
+    "fileMatch": [".*.yaml$"]
   }
 }
