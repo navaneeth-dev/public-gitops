@@ -5,6 +5,6 @@ metadata:
 spec:
   schedule: "0 0 0 * * *"
   immediate: true
-  backupOwnerReference: self
+  backupOwnerReference: cluster
   cluster:
     name: attendance-v2-cluster

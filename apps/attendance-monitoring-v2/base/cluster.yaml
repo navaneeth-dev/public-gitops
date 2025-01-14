@@ -16,6 +16,8 @@ spec:
     barmanObjectStore:
       destinationPath: "s3://attendance-monitoring/staging/"
       endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
+      wal:
+        compression: gzip
       s3Credentials:
         accessKeyId:
           name: attendance-v2-aws-secret
