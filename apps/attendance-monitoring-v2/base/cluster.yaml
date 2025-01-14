@@ -5,8 +5,14 @@ metadata:
 spec:
   instances: 1
   storage:
+    storageClass: longhorn
+    size: 1Gi
+  walStorage:
+    storageClass: longhorn
     size: 1Gi
   backup:
+    volumeSnapshot:
+       className: attendance-volume-snapshots
     barmanObjectStore:
       destinationPath: "s3://attendance-monitoring/staging/"
       endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
@@ -17,3 +23,4 @@ spec:
         secretAccessKey:
           name: attendance-v2-aws-secret
           key: AWS_SECRET_ACCESS_KEY
+    retentionPolicy: "14d"
