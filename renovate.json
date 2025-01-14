@@ -4,9 +4,12 @@
     "config:recommended"
   ],
   "kubernetes": {
-    "fileMatch": [".*.yaml$"]
+    "fileMatch": ["\\.yaml$"]
   },
   "helmv3": {
-    "fileMatch": [".*.yaml$"]
+    "fileMatch": ["\\.yaml$"]
+  },
+  "argocd": {
+    "fileMatch": ["\\.yaml$"]
   }
 }
