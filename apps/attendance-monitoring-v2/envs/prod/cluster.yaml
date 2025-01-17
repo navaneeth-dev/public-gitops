@@ -12,4 +12,4 @@ spec:
     size: 1Gi
   walStorage:
     storageClass: longhorn
-    size: 3Gi
+    size: 5Gi
