@@ -7,3 +7,9 @@ spec:
   backup:
     barmanObjectStore:
       destinationPath: "s3://longhorn-oracle/prod/"
+  storage:
+    storageClass: longhorn
+    size: 1Gi
+  walStorage:
+    storageClass: longhorn
+    size: 2Gi
