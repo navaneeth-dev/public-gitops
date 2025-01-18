@@ -5,10 +5,10 @@ metadata:
 spec:
   instances: 1
   storage:
-    storageClass: longhorn
+    storageClass: local-path
     size: 1Gi
   walStorage:
-    storageClass: longhorn
+    storageClass: local-path
     size: 1Gi
   backup:
     volumeSnapshot:
