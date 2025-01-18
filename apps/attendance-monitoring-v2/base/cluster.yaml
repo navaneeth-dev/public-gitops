@@ -12,8 +12,9 @@ spec:
     size: 1Gi
   backup:
     barmanObjectStore:
-      destinationPath: "s3://longhorn-oracle/staging/"
+      destinationPath: "s3://longhorn-oracle/"
       endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
+      serverName: "attendance-v2-staging"
       wal:
         compression: gzip
       s3Credentials:

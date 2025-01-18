@@ -6,7 +6,8 @@ spec:
   instances: 3
   backup:
     barmanObjectStore:
-      destinationPath: "s3://longhorn-oracle/prod/"
+      destinationPath: "s3://longhorn-oracle/"
+      serverName: "attendance-v2-prod"
   storage:
     storageClass: longhorn
     size: 1Gi
