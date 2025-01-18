@@ -6,7 +6,7 @@ spec:
   instances: 1
   storage:
     storageClass: longhorn
-    size: 500Mi
+    size: 1Gi
   walStorage:
     storageClass: longhorn
     size: 1Gi
