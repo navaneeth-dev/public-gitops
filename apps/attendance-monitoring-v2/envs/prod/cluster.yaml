@@ -8,8 +8,6 @@ spec:
     barmanObjectStore:
       destinationPath: "s3://longhorn-oracle/attendance-v2-prod"
   storage:
-    storageClass: longhorn
     size: 1Gi
   walStorage:
-    storageClass: longhorn
     size: 5Gi
