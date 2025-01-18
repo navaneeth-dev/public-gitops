@@ -11,8 +11,6 @@ spec:
     storageClass: longhorn-fast
     size: 1Gi
   backup:
-    volumeSnapshot:
-       className: longhorn
     barmanObjectStore:
       destinationPath: "s3://longhorn-oracle/staging/"
       endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
