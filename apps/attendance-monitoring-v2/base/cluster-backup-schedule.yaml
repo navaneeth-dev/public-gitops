@@ -6,6 +6,7 @@ spec:
   schedule: "0 0 0 * * 1,5"
   immediate: true
   backupOwnerReference: cluster
-  method: volumeSnapshot
+  #method: volumeSnapshot
+  method: barmanObjectStore
   cluster:
     name: attendance-v2-cluster
