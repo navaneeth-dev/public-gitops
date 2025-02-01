@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: kube-prometheus-stack
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 68.3.3
+    helm:
+      valuesObject:
+        grafana:
+          ingress:
+            enabled: true
+            hosts:
+            - grafana.fossindia.ovh
+            tls:
+            - secretName: prod-fossindia-ovh-tls
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: homelab
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
