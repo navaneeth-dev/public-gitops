@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: reflector
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: reflector
+    repoURL: https://emberstack.github.io/helm-charts
+    targetRevision: 7.1.288
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: reflector
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
