@@ -17,6 +17,7 @@ spec:
             hosts:
             - grafana.fossindia.ovh
             tls:
+            - secretName: prod-fossindia-ovh-tls
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-prometheus-stack
