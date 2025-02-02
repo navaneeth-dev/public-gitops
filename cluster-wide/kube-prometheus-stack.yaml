@@ -18,6 +18,9 @@ spec:
             - grafana.fossindia.ovh
             tls:
             - secretName: prod-fossindia-ovh-tls
+          grafana.ini:
+            smtp:
+              existingSecret: "smtp-creds"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-prometheus-stack
@@ -25,3 +28,33 @@ spec:
     syncOptions:
     - CreateNamespace=true
     - ServerSideApply=true
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: smtp-creds
+  namespace: kube-prometheus-stack
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: smtp-creds
+
+  data:
+    - secretKey: enabled
+      remoteRef:
+        key: SMTP_ENABLED
+    - secretKey: host
+      remoteRef:
+        key: SMTP_HOST
+    - secretKey: user
+      remoteRef:
+        key: SMTP_USER
+    - secretKey: password
+      remoteRef:
+        key: SMTP_PASSWORD
+    - secretKey: from_address
+      remoteRef:
+        key: SMTP_FROM
