@@ -6,7 +6,7 @@ spec:
   instances: 3
   backup:
     barmanObjectStore:
-      destinationPath: "s3://longhorn-oracle/attendance-v2-prod"
+      destinationPath: "s3://oracle-kubernetes/cloudnative-pg-prod"
   storage:
     size: 1Gi
   walStorage:

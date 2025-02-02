@@ -12,8 +12,8 @@ spec:
     size: 1Gi
   backup:
     barmanObjectStore:
-      destinationPath: "s3://longhorn-oracle/attendance-v2-staging"
-      endpointURL: 'https://s3.eu-central-003.backblazeb2.com'
+      destinationPath: "s3://oracle-kubernetes/cloudnative-pg-staging"
+      endpointURL: 'https://oracle-kubernetes.q7l4.sg.idrivee2-26.com'
       wal:
         compression: gzip
       s3Credentials:
