@@ -6,7 +6,7 @@ spec:
   instances: 3
   backup:
     barmanObjectStore:
-      destinationPath: "cloudnative-pg-prod"
+      destinationPath: "s3://oracle-kubernetes/cloudnative-pg-prod"
   storage:
     size: 1Gi
   walStorage:
