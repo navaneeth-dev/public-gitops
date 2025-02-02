@@ -6,7 +6,7 @@ spec:
   instances: 3
   backup:
     barmanObjectStore:
-      destinationPath: "s3://cloudnative-pg-prod"
+      destinationPath: "cloudnative-pg-prod"
   storage:
     size: 1Gi
   walStorage:
