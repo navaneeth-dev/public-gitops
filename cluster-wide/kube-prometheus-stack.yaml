@@ -23,7 +23,7 @@ spec:
           grafana.ini:
             smtp:
               enabled: "true"
-              host: "smtp.eu.mailgun.org"
+              host: "smtp.eu.mailgun.org:465"
               from_address: "grafana@mail.rizexor.com"
   destination:
     server: "https://kubernetes.default.svc"
