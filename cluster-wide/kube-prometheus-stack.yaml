@@ -18,9 +18,11 @@ spec:
             - grafana.fossindia.ovh
             tls:
             - secretName: prod-fossindia-ovh-tls
+          smtp:
+            existingSecret: "smtp-creds"
           grafana.ini:
             smtp:
-              existingSecret: "smtp-creds"
+              enabled: "true"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-prometheus-stack
@@ -43,9 +45,6 @@ spec:
     name: smtp-creds
 
   data:
-    - secretKey: enabled
-      remoteRef:
-        key: SMTP_ENABLED
     - secretKey: host
       remoteRef:
         key: SMTP_HOST
