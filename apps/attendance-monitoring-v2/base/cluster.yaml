@@ -12,7 +12,7 @@ spec:
     size: 1Gi
   backup:
     barmanObjectStore:
-      destinationPath: "s3://oracle-kubernetes/cloudnative-pg-staging"
+      destinationPath: "s3://cloudnative-pg-staging"
       endpointURL: 'https://oracle-kubernetes.q7l4.sg.idrivee2-26.com'
       wal:
         compression: gzip
