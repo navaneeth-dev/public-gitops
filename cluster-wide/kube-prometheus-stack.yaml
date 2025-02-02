@@ -23,6 +23,8 @@ spec:
           grafana.ini:
             smtp:
               enabled: "true"
+              host: "smtp.eu.mailgun.org"
+              from_address: "grafana@mail.rizexor.com"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-prometheus-stack
@@ -45,15 +47,9 @@ spec:
     name: smtp-creds
 
   data:
-    - secretKey: host
-      remoteRef:
-        key: SMTP_HOST
     - secretKey: user
       remoteRef:
         key: SMTP_USER
     - secretKey: password
       remoteRef:
         key: SMTP_PASSWORD
-    - secretKey: from_address
-      remoteRef:
-        key: SMTP_FROM
