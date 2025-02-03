@@ -1,3 +1,4 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -33,4 +34,21 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true  
-
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fossindia
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/navaneeth-dev/public-gitops.git
+    targetRevision: HEAD
+    path: fossindia
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: fossindia
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true  

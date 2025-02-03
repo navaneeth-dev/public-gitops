@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: commafeed
+spec:
+  rules:
+    - host: 'commafeed.fossindia.ovh'
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name:  commafeed
+              port:
+                number: 8082
+  tls:
+    secretName: prod-fossindia-ovh-tls
+

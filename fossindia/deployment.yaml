@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels:
+    app.kubernetes.io/name: fossindia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fossindia
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fossindia
+    spec:
+      containers:
+      - name: commafeed
+        image: athou/commafeed:5.4.0-postgresql
+        ports:
+        - containerPort: 8082
+        env:
+        - name: QUARKUS_DATASOURCE_JDBC_URL
+          valueFrom:
+              secretKeyRef:
+                name: fossindia-commafeed-app
+                key: jdbc-uri
+        - name: QUARKUS_DATASOURCE_USERNAME
+          valueFrom:
+              secretKeyRef:
+                name: fossindia-commafeed-app
+                key: username
+        - name: QUARKUS_DATASOURCE_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: fossindia-commafeed-app
+                key: password
+        resources:
+          limits:
+            memory: 256M
