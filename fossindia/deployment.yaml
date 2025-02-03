@@ -23,17 +23,17 @@ spec:
         - name: QUARKUS_DATASOURCE_JDBC_URL
           valueFrom:
               secretKeyRef:
-                name: fossindia-commafeed-app
+                name: fossindia-commafeed-cluster-app
                 key: jdbc-uri
         - name: QUARKUS_DATASOURCE_USERNAME
           valueFrom:
               secretKeyRef:
-                name: fossindia-commafeed-app
+                name: fossindia-commafeed-cluster-app
                 key: username
         - name: QUARKUS_DATASOURCE_PASSWORD
           valueFrom:
               secretKeyRef:
-                name: fossindia-commafeed-app
+                name: fossindia-commafeed-cluster-app
                 key: password
         resources:
           limits:
