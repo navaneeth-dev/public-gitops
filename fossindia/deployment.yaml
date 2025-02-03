@@ -38,3 +38,28 @@ spec:
         resources:
           limits:
             memory: 256M
+      - name: ntfy
+        image: binwiederhier/ntfy:v2.11.0
+        command: serve
+        ports:
+        - containerPort: 80
+        env:
+          name: TZ
+          value: "Asia/Kolkata"
+        volumeMounts:
+        - name: ntfy-config
+          mountPath: /etc/ntfy/server.yml
+        - name: ntfy-data
+          mountPath: /var/lib/ntfy
+        - name: ntfy-cache
+          mountPath: /var/cache/ntfy
+      volumes:
+      - name: ntfy-config
+        configMap:
+          name: fossindia-ntfy-config
+      - name: ntfy-data
+        persistentVolumeClaim:
+          claimName: ntfy-data
+      - name: ntfy-cache
+        persistentVolumeClaim:
+          claimName: ntfy-cache

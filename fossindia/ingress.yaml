@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -14,6 +15,25 @@ spec:
               name:  fossindia-commafeed
               port:
                 number: 8082
+  tls:
+  - secretName: prod-fossindia-ovh-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ntfy
+spec:
+  rules:
+    - host: 'ntfy.fossindia.ovh'
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name:  fossindia-ntfy
+              port:
+                number: 80
   tls:
   - secretName: prod-fossindia-ovh-tls
 
