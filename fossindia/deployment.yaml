@@ -44,7 +44,7 @@ spec:
         ports:
         - containerPort: 80
         env:
-          name: TZ
+        - name: TZ
           value: "Asia/Kolkata"
         volumeMounts:
         - name: ntfy-config
