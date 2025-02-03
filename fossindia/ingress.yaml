@@ -11,7 +11,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name:  commafeed
+              name:  fossindia-commafeed
               port:
                 number: 8082
   tls:
