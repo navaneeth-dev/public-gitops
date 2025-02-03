@@ -15,5 +15,5 @@ spec:
               port:
                 number: 8082
   tls:
-    secretName: prod-fossindia-ovh-tls
+  - secretName: prod-fossindia-ovh-tls
 
