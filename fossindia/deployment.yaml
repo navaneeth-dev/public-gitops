@@ -59,7 +59,7 @@ spec:
           name: fossindia-ntfy-config
       - name: ntfy-data
         persistentVolumeClaim:
-          claimName: ntfy-data
+          claimName: fossindia-ntfy-data
       - name: ntfy-cache
         persistentVolumeClaim:
-          claimName: ntfy-cache
+          claimName: fossindia-ntfy-cache
