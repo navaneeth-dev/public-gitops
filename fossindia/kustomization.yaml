@@ -9,3 +9,4 @@ resources:
 - cluster-backup-schedule.yaml
 - ingress.yaml
 - pvc.yaml
+- configmap.yaml
