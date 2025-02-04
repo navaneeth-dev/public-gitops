@@ -3,13 +3,14 @@ kind: ConfigMap
 metadata:
   name: ntfy-config
 data:
-  base-url: "https://ntfy.fossindia.ovh"
+  server.yml: |
+    base-url: "https://ntfy.fossindia.ovh"
 
-  auth-file: "/var/lib/ntfy/user.db"
-  auth-default-access: "read-write"
+    auth-file: "/var/lib/ntfy/user.db"
+    auth-default-access: "read-write"
 
-  cache-file: "/var/cache/ntfy/cache.db"
-  attachment-cache-dir: "/var/cache/ntfy/attachments"
-  behind-proxy: "true"
+    cache-file: "/var/cache/ntfy/cache.db"
+    attachment-cache-dir: "/var/cache/ntfy/attachments"
+    behind-proxy: "true"
 
-  enable-login: "true"
+    enable-login: "true"

@@ -49,6 +49,7 @@ spec:
         volumeMounts:
         - name: ntfy-config
           mountPath: /etc/ntfy/server.yml
+          subPath: server.yml
         - name: ntfy-data
           mountPath: /var/lib/ntfy
         - name: ntfy-cache
