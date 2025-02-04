@@ -11,6 +11,6 @@ data:
 
     cache-file: "/var/cache/ntfy/cache.db"
     attachment-cache-dir: "/var/cache/ntfy/attachments"
-    behind-proxy: "true"
+    behind-proxy: true
 
-    enable-login: "true"
+    enable-login: true
