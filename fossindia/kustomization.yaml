@@ -8,3 +8,4 @@ resources:
 - cluster.yaml
 - cluster-backup-schedule.yaml
 - ingress.yaml
+- pvc.yaml
