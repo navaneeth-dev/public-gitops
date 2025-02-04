@@ -43,6 +43,10 @@ spec:
         args: [ "serve" ]
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
         env:
         - name: TZ
           value: "Asia/Kolkata"

@@ -9,4 +9,8 @@ resources:
 - cluster-backup-schedule.yaml
 - ingress.yaml
 - pvc.yaml
-- configmap.yaml
+
+configMapGenerator:
+  - name: ntfy-config
+    files:
+      - server.yml

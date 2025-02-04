@@ -1,0 +1,10 @@
+base-url: "https://ntfy.fossindia.ovh"
+
+auth-file: "/var/lib/ntfy/user.db"
+auth-default-access: "read-write"
+
+cache-file: "/var/cache/ntfy/cache.db"
+attachment-cache-dir: "/var/cache/ntfy/attachments"
+behind-proxy: true
+
+enable-login: true
