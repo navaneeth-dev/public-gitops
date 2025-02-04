@@ -40,7 +40,7 @@ spec:
             memory: 256M
       - name: ntfy
         image: binwiederhier/ntfy:v2.11.0
-        command: [ "serve" ]
+        args: [ "serve" ]
         ports:
         - containerPort: 80
         env:
