@@ -6,6 +6,9 @@ resources:
 - ingress.yaml
 - sealed-laravel.yaml
 
+patches:
+  - path: sealed-aws-secret.yaml
+
 #patchesStrategicMerge:
 #- deployment.yml
 #- version.yml
