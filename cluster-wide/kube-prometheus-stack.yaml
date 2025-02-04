@@ -12,6 +12,9 @@ spec:
     helm:
       valuesObject:
         grafana:
+          persistence:
+            enabled: true
+            storageClassName: longhorn
           ingress:
             enabled: true
             hosts:
