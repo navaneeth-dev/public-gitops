@@ -16,7 +16,7 @@ spec:
     spec:
       initContainers:
         - name: migrate
-          image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
+          image: ghcr.io/onlyvels/attendance-monitoring:0.1.3
           command: ["php", "artisan", "migrate", "--force"]
           env:
           - name: DB_PASSWORD
@@ -33,7 +33,7 @@ spec:
                 name: attendance-v2-cluster-app
       containers:
       - name: laravel
-        image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
+        image: ghcr.io/onlyvels/attendance-monitoring:0.1.3
         ports:
         - containerPort: 8000
         env:
@@ -51,7 +51,7 @@ spec:
               name: attendance-v2-cluster-app
 
       - name: worker
-        image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
+        image: ghcr.io/onlyvels/attendance-monitoring:0.1.3
         command: ["php"]
         args: ["artisan", "queue:work"]
         env:
@@ -69,7 +69,7 @@ spec:
               name: attendance-v2-cluster-app
 
       - name: scheduler
-        image: ghcr.io/onlyvels/attendance-monitoring:0.1.2
+        image: ghcr.io/onlyvels/attendance-monitoring:0.1.3
         command: ["/usr/bin/supercronic"]
         args: ["-overlapping", "/etc/supercronic/laravel"]
         env:
