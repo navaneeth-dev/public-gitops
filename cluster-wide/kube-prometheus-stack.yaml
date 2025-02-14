@@ -35,6 +35,7 @@ spec:
           persistence:
             enabled: true
             storageClassName: longhorn
+            size: 1Gi
           ingress:
             enabled: true
             hosts:
