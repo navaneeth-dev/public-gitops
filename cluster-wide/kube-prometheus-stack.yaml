@@ -20,7 +20,7 @@ spec:
                   accessModes: ["ReadWriteOnce"]
                   resources:
                     requests:
-                      storage: 10Gi
+                      storage: 5Gi
         alertmanager:
           alertmanagerSpec:
             storage:
@@ -30,7 +30,7 @@ spec:
                   accessModes: ["ReadWriteOnce"]
                   resources:
                     requests:
-                      storage: 5Gi
+                      storage: 1Gi
         grafana:
           persistence:
             enabled: true
