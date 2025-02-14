@@ -11,6 +11,16 @@ spec:
     targetRevision: 68.4.4
     helm:
       valuesObject:
+        prometheus:
+          prometheusSpec:
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: longhorn
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 10Gi
         grafana:
           persistence:
             enabled: true
@@ -18,9 +28,9 @@ spec:
           ingress:
             enabled: true
             hosts:
-            - grafana.fossindia.ovh
+              - grafana.fossindia.ovh
             tls:
-            - secretName: prod-fossindia-ovh-tls
+              - secretName: prod-fossindia-ovh-tls
           smtp:
             existingSecret: "smtp-creds"
           grafana.ini:
@@ -33,8 +43,8 @@ spec:
     namespace: kube-prometheus-stack
   syncPolicy:
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
+      - CreateNamespace=true
+      - ServerSideApply=true
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
