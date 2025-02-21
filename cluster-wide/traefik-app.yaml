@@ -20,6 +20,7 @@ spec:
             redirections:
               entryPoint:
                 to: websecure
+                scheme: https
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
