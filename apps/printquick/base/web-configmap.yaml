@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  APP_TIMEZONE: Asia/Kolkata
+  APP_URL: https://printquick.staging.rizexor.com
+  APP_ENV: staging
+  APP_NAME: PrintQuick
+
+  OCTANE_HTTPS: "true"
+
+  DB_CONNECTION: pgsql
+  DB_HOST: printquick-cluster-rw
+  DB_PORT: "5432"
+  DB_DATABASE: app
+  DB_USERNAME: app

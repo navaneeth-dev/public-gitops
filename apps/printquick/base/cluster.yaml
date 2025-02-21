@@ -1,0 +1,26 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cluster
+spec:
+  instances: 1
+  storage:
+    storageClass: longhorn-fast
+    size: 500Mi
+  walStorage:
+    storageClass: longhorn-fast
+    size: 1Gi
+  backup:
+    barmanObjectStore:
+      destinationPath: "s3://oracle-kubernetes/cloudnative-pg-staging"
+      endpointURL: "https://q7l4.sg.idrivee2-26.com"
+      wal:
+        compression: gzip
+      s3Credentials:
+        accessKeyId:
+          name: attendance-v2-aws-secret
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: attendance-v2-aws-secret
+          key: AWS_SECRET_ACCESS_KEY
+    retentionPolicy: "14d"

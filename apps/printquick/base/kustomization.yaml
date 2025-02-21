@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namePrefix: printquick-
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - web-configmap.yaml
+  - cluster.yaml
+  # - cluster-backup-schedule.yaml
+  - sealed-aws-secret.yaml
+  - sealed-ghcr-creds.yaml

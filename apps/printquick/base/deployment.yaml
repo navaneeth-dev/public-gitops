@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels:
+    app.kubernetes.io/name: printquick
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: printquick
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: printquick
+    spec:
+      initContainers:
+        - name: migrate
+          image: ghcr.io/navaneeth-dev/printquick:0.0.1
+          command: ["php", "artisan", "migrate", "--force"]
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: printquick-cluster-app
+                  key: password
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - secretRef:
+                name: laravel
+            - secretRef:
+                name: printquick-cluster-app
+      containers:
+        - name: laravel
+          image: ghcr.io/navaneeth-dev/printquick:0.0.1
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: printquick-cluster-app
+                  key: password
+          envFrom:
+            - secretRef:
+                name: laravel
+            - configMapRef:
+                name: web-config
+            - secretRef:
+                name: printquick-cluster-app
+      imagePullSecrets:
+        - name: regcred
