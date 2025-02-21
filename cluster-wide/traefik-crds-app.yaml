@@ -2,23 +2,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: traefik
+  name: traefik-crds
   namespace: argocd
 spec:
   project: default
   source:
-    chart: traefik
+    chart: traefik-crds
     repoURL: https://traefik.github.io/charts
     targetRevision: 34.4.0
-    helm:
-      skipCrds: true
-      valuesObject:
-        deployment:
-          replicas: 3
-        ports:
-          http:
-            redirections:
-              entryPoint: websecure
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
