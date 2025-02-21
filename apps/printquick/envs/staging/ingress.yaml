@@ -4,7 +4,7 @@ metadata:
   name: ingress
 spec:
   rules:
-    - host: "printquick.staging.rizexor.com"
+    - host: "*.printquick.staging.rizexor.com"
       http:
         paths:
           - path: /
