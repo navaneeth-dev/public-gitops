@@ -5,5 +5,14 @@ metadata:
 spec:
   rules:
     - host: "*.printquick.prod.rizexor.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc
+                port:
+                  number: 80
   tls:
     - secretName: prod-rizexor-com-tls
