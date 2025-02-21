@@ -3,9 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - ingress.yaml
   - sealed-laravel.yaml
 
 patches:
   - path: web-configmap.yaml
   - path: cluster.yaml
+  - path: ingress.yaml

@@ -5,7 +5,7 @@ metadata:
   annotations:
     sealedsecrets.bitnami.com/namespace-wide: "true"
   creationTimestamp: null
-  name: laravel
+  name: printquick-laravel
   namespace: prod
 spec:
   encryptedData:
@@ -15,5 +15,5 @@ spec:
       annotations:
         sealedsecrets.bitnami.com/namespace-wide: "true"
       creationTimestamp: null
-      name: laravel
+      name: printquick-laravel
       namespace: prod
