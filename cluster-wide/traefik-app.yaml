@@ -15,10 +15,6 @@ spec:
       valuesObject:
         deployment:
           replicas: 3
-        ports:
-          http:
-            redirections:
-              entryPoint: websecure
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
