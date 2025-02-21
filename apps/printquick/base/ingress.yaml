@@ -4,6 +4,16 @@ metadata:
   name: ingress
 spec:
   rules:
+    - host: "printquick.staging.rizexor.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc
+                port:
+                  number: 80
     - host: "*.printquick.staging.rizexor.com"
       http:
         paths:
