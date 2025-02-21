@@ -50,4 +50,4 @@ spec:
             - secretRef:
                 name: printquick-cluster-app
       imagePullSecrets:
-        - name: regcred
+        - name: printquick-printquick-regcred
