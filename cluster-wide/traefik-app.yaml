@@ -10,6 +10,12 @@ spec:
     chart: traefik
     repoURL: https://traefik.github.io/charts
     targetRevision: 34.4.0
+    helm:
+      valuesObject:
+        ports:
+          http:
+            redirections:
+              entryPoint: websecure
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
