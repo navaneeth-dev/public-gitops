@@ -12,6 +12,8 @@ spec:
     targetRevision: 34.4.0
     helm:
       valuesObject:
+        deployment:
+          replicas: 3
         ports:
           http:
             redirections:
