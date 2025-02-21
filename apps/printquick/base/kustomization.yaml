@@ -7,6 +7,7 @@ resources:
   - service.yaml
   - web-configmap.yaml
   - cluster.yaml
+  - ingress.yaml
   # - cluster-backup-schedule.yaml
   - sealed-aws-secret.yaml
   - sealed-ghcr-creds.yaml
