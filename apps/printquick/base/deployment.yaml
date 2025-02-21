@@ -16,7 +16,7 @@ spec:
     spec:
       initContainers:
         - name: migrate
-          image: ghcr.io/navaneeth-dev/printquick:0.0.1
+          image: &laravel_image ghcr.io/navaneeth-dev/printquick:0.0.2
           command: ["php", "artisan", "migrate", "--force"]
           env:
             - name: DB_PASSWORD
@@ -33,7 +33,7 @@ spec:
                 name: printquick-cluster-app
       containers:
         - name: laravel
-          image: ghcr.io/navaneeth-dev/printquick:0.0.1
+          image: *laravel_image
           ports:
             - containerPort: 8000
           env:
