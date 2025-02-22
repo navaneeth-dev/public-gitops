@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
     - kind: Rule
       match: Host(`argocd.prod.rizexor.com`)
@@ -20,5 +20,5 @@ spec:
         - name: argocd-server
           port: 80
           scheme: h2c
-  tls:
-    secretName: prod-rizexor-com-tls
+  # tls:
+  #   secretName: prod-rizexor-com-tls
