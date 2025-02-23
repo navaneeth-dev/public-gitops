@@ -49,5 +49,17 @@ spec:
                 name: web-config
             - secretRef:
                 name: printquick-cluster-app
+          livenessProbe:
+            httpGet:
+              path: /up
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /up
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 3
       imagePullSecrets:
         - name: printquick-regcred
