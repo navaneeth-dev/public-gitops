@@ -16,7 +16,7 @@ spec:
     spec:
       initContainers:
         - name: migrate
-          image: &laravel_image ghcr.io/navaneeth-dev/printquick:0.0.4
+          image: &laravel_image ghcr.io/navaneeth-dev/printquick:0.0.6
           command: ["php", "artisan", "migrate", "--force"]
           env:
             - name: DB_PASSWORD
