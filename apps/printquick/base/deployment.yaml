@@ -31,6 +31,22 @@ spec:
                 name: laravel
             - secretRef:
                 name: printquick-cluster-app
+        - name: migrate-tenants
+          image: *laravel_image
+          command: ["php", "artisan", "tenants:migrate", "--force"]
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: printquick-cluster-app
+                  key: password
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - secretRef:
+                name: laravel
+            - secretRef:
+                name: printquick-cluster-app
       containers:
         - name: laravel
           image: *laravel_image
