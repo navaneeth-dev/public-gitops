@@ -11,3 +11,4 @@ resources:
   # - cluster-backup-schedule.yaml
   - sealed-aws-secret.yaml
   - sealed-ghcr-creds.yaml
+  - sealed-laravel.yaml
