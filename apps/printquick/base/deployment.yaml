@@ -30,7 +30,7 @@ spec:
             - secretRef:
                 name: laravel
             - secretRef:
-                name: laravel-common
+                name: printquick-laravel-common
             - secretRef:
                 name: printquick-cluster-app
         - name: migrate-tenants
@@ -48,7 +48,7 @@ spec:
             - secretRef:
                 name: laravel
             - secretRef:
-                name: laravel-common
+                name: printquick-laravel-common
             - secretRef:
                 name: printquick-cluster-app
       containers:
@@ -66,7 +66,7 @@ spec:
             - secretRef:
                 name: laravel
             - secretRef:
-                name: laravel-common
+                name: printquick-laravel-common
             - configMapRef:
                 name: web-config
             - secretRef:
