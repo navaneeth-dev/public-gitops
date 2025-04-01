@@ -32,6 +32,8 @@ spec:
             - secretRef:
                 name: printquick-laravel-common
             - secretRef:
+                name: printquick-laravel-s3-creds
+            - secretRef:
                 name: printquick-cluster-app
         - name: migrate-tenants
           image: *laravel_image
@@ -50,6 +52,8 @@ spec:
             - secretRef:
                 name: printquick-laravel-common
             - secretRef:
+                name: printquick-laravel-s3-creds
+            - secretRef:
                 name: printquick-cluster-app
       containers:
         - name: laravel
@@ -67,6 +71,8 @@ spec:
                 name: laravel
             - secretRef:
                 name: printquick-laravel-common
+            - secretRef:
+                name: printquick-laravel-s3-creds
             - configMapRef:
                 name: web-config
             - secretRef:
