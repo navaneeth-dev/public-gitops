@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ../../base
   - sealed-laravel.yaml
+  - sealed-laravel-s3-creds.yaml

@@ -9,3 +9,4 @@ patches:
   - path: web-configmap.yaml
   - path: cluster.yaml
   - path: ingress.yaml
+  - path: sealed-laravel-s3-creds
