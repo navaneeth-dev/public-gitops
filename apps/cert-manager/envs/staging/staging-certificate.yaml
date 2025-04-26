@@ -27,6 +27,6 @@ spec:
     - 'staging.rizexor.com'
     - '*.staging.rizexor.com'
   issuerRef:
-    name: staging-rizexor-com-issuer
+    name: staging-rizexor-com-clusterissuer
     kind: ClusterIssuer
 
