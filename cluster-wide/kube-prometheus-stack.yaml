@@ -13,7 +13,8 @@ spec:
       valuesObject:
         prometheus:
           prometheusSpec:
-            retention: 6d
+            retention: 2d
+            retentionSize: 9Gi
             storageSpec:
               volumeClaimTemplate:
                 spec:
