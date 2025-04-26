@@ -14,7 +14,7 @@ spec:
         prometheus:
           prometheusSpec:
             retention: 2d
-            retentionSize: 9G
+            retentionSize: 9GB
             storageSpec:
               volumeClaimTemplate:
                 spec:
