@@ -1,4 +1,23 @@
 apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: prod-rizexor-com-clusterissuer
+  namespace: cert-manager
+spec:
+  acme:
+    email: certs@rize.anonaddy.com
+    #server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    solvers:
+    - dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-api-token-secret-infisical
+            key: api-token
+---
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: prod-rizexor-com-cert
@@ -8,5 +27,5 @@ spec:
     - 'prod.rizexor.com'
     - '*.prod.rizexor.com'
   issuerRef:
-    name: prod-rizexor-com-issuer
+    name: prod-rizexor-com-clusterissuer
     kind: ClusterIssuer
