@@ -87,4 +87,4 @@ spec:
               name: attendance-v2-cluster-app
 
       - name: microservice
-        image: ghcr.io/navaneeth-dev/attendance-microservice:0.0.5
+        image: ghcr.io/onlyvels/attendance-microservice:main
