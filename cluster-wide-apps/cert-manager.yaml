@@ -10,7 +10,7 @@ spec:
       repoURL: https://charts.jetstack.io
       targetRevision: v1.17.2
       helm:
-        valuesObject:
+        valueFiles:
         - $values/cluster-wide-k8s/cert-manager/values.yaml
     - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
       targetRevision: HEAD

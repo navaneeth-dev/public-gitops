@@ -11,7 +11,7 @@ spec:
       repoURL: https://charts.longhorn.io/
       targetRevision: 1.8.1
       helm:
-        valuesFiles:
+        valueFiles:
         - $values/cluster-wide-k8s/longhorn/values.yaml
     - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
       targetRevision: HEAD
