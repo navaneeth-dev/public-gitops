@@ -3,22 +3,10 @@
 
 ![ArgoCD](https://github.com/navaneeth-dev/public-gitops/blob/main/assets/argocd.png)
 
-## Getting Started
+## Folder Structure
 
-1st Server Node:
-
-```bash
-curl -sfL https://get.k3s.io | sh -s - server \
-    --cluster-init \
-    --tls-san=10.0.0.2 \
-    --cluster-cidr=10.42.0.0/16,fd12:cafe:42::/56 --service-cidr=10.43.0.0/16,fd12:cafe:43::/112
 ```
-
-Join Servers:
-
-```bash
-curl -sfL https://get.k3s.io | K3S_TOKEN=TOKEN_HERE sh -s - server \
-    --server https://10.0.0.52:6443 \
-    --tls-san=10.0.0.2 \
-    --cluster-cidr=10.42.0.0/16,fd12:cafe:42::/56 --service-cidr=10.43.0.0/16,fd12:cafe:43::/112
+apps: Used for Argo applications which need two environments (prod and staging)
+appsets: Used to add new environments like staging, qa
+cluster-wide: Used for applications that required ONLY a single instance running
 ```

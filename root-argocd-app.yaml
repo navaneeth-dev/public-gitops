@@ -20,18 +20,19 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-wide
+  name: cluster-wide-apps
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/navaneeth-dev/public-gitops.git
     targetRevision: HEAD
-    path: cluster-wide
+    path: cluster-wide-apps
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
+    automated: {}
     syncOptions:
     - CreateNamespace=true  
 ---
