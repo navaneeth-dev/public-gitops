@@ -11,8 +11,7 @@ spec:
       targetRevision: v1.17.2
       helm:
         valuesObject:
-          crds:
-            enabled: true
+        - ../cluster-wide-k8s/cert-manager/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
