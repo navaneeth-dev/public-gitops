@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/navaneeth-dev/public-gitops.git
     targetRevision: HEAD
-    path: cluster-wide-apps
+    path: cluster-wide-k8s/argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
