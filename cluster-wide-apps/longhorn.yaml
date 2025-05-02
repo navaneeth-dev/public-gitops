@@ -12,7 +12,10 @@ spec:
       targetRevision: 1.8.1
       helm:
         valuesFiles:
-        - ../cluster-wide-k8s/longhorn/values.yaml
+        - $values/cluster-wide-k8s/longhorn/values.yaml
+    - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
+      targetRevision: HEAD
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
