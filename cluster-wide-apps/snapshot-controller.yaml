@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/kubernetes-csi/external-snapshotter
-    targetRevision: v8.2.1
+    targetRevision: v8.2.0
     path: deploy/kubernetes/snapshot-controller
   destination:
     server: https://kubernetes.default.svc
