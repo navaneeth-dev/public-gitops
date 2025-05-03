@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-snapshotter
+  name: snapshot-controller-crds
   namespace: argocd
 spec:
   project: default
