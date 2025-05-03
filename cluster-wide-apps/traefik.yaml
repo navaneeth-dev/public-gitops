@@ -17,6 +17,9 @@ spec:
     - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
       targetRevision: HEAD
       ref: values
+    - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
+      targetRevision: HEAD
+      path: cluster-wide-k8s/traefik
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik

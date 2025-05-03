@@ -15,6 +15,9 @@ spec:
     - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
       targetRevision: HEAD
       ref: values
+    - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
+      targetRevision: HEAD
+      path: cluster-wide-k8s/kube-prometheus-stack
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-prometheus-stack

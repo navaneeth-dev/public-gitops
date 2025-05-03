@@ -16,6 +16,9 @@ spec:
     - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
       targetRevision: HEAD
       ref: values
+    - repoURL: 'https://github.com/navaneeth-dev/public-gitops.git'
+      targetRevision: HEAD
+      path: cluster-wide-k8s/longhorn
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
