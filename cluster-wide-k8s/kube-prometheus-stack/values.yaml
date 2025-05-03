@@ -1,0 +1,41 @@
+prometheus:
+  prometheusSpec:
+    retention: 2d
+    retentionSize: 9GB
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+  alertmanager:
+    alertmanagerSpec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: longhorn
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 1Gi
+  grafana:
+    persistence:
+      enabled: true
+      storageClassName: longhorn
+      size: 1Gi
+    ingress:
+      enabled: true
+      hosts:
+        - grafana.fossindia.ovh
+      tls:
+        - secretName: prod-fossindia-ovh-tls
+    smtp:
+      existingSecret: "smtp-creds"
+    grafana.ini:
+      smtp:
+        enabled: "true"
+        host: "smtp.eu.mailgun.org:465"
+        from_address: "grafana@mail.rizexor.com"

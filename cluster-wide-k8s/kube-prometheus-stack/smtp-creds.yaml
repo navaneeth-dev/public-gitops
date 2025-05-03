@@ -1,0 +1,21 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: smtp-creds
+  namespace: kube-prometheus-stack
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+
+  target:
+    name: smtp-creds
+
+  data:
+    - secretKey: user
+      remoteRef:
+        key: SMTP_USER
+    - secretKey: password
+      remoteRef:
+        key: SMTP_PASSWORD
