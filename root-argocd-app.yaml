@@ -45,9 +45,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/navaneeth-dev/public-gitops.git
+    repoURL: https://github.com/navaneeth-dev/fossindia.git
     targetRevision: HEAD
-    path: fossindia
+    path: ./
   destination:
     server: https://kubernetes.default.svc
     namespace: fossindia
