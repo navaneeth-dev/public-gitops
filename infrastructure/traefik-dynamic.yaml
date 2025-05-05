@@ -1,0 +1,39 @@
+http:
+  routers:
+    prod:
+      rule: 'HostRegexp(`^.+\.prod\.rizexor\.com$`) || Host(`prod.rizexor.com`)'
+      service: ingress
+      tls:
+        certresolver: cloudflare
+        domains:
+          - main: 'prod.rizexor.com'
+            sans:
+              - '*.prod.rizexor.com'
+              - '*.printquick.prod.rizexor.com'
+    staging:
+      rule: 'HostRegexp(`^.+\.staging\.rizexor\.com$`) || Host(`staging.rizexor.com`)'
+      service: ingress
+      tls:
+        certresolver: cloudflare-staging
+        domains:
+          - main: 'staging.rizexor.com'
+            sans:
+              - '*.staging.rizexor.com'
+              - '*.printquick.staging.rizexor.com'
+    fossindia:
+      rule: 'HostRegexp(`^.+\.fossindia\.ovh$`)'
+      service: ingress
+      tls:
+        certresolver: cloudflare
+        domains:
+          - main: 'fossindia.ovh'
+            sans:
+              - '*.fossindia.ovh'
+
+  services:
+    ingress:
+      loadBalancer:
+        servers:
+          - url: http://10.0.10.98
+          - url: http://10.0.10.149
+          - url: http://10.0.10.54

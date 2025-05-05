@@ -1,0 +1,33 @@
+variant: fcos
+version: 1.6.0
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICiUB1MgFciQ63LsGGBwHVjCtf1cn50BdxN9jTtfTPGF rize@legion
+storage:
+  directories:
+  - path: /etc/traefik/confs
+    overwrite: false
+  files:
+    - path: /etc/containers/systemd/hello.container
+      contents:
+        inline: |
+          [Unit]
+          Description=Traefik Service
+          Wants=network-online.target
+          After=network-online.target
+
+          [Container]
+          ContainerName=traefik-proxy
+          Image=docker.io/traefik
+          Exec=
+
+          [Install]
+          WantedBy=multi-user.target
+    - path: /etc/traefik/traefik.yaml
+      contents:
+        source: https://raw.githubusercontent.com/navaneeth-dev/public-gitops/refs/heads/main/infrastructure/traefik-static.yaml
+    - path: /etc/traefik/confs/config.yaml
+      contents:
+        source: https://raw.githubusercontent.com/navaneeth-dev/public-gitops/refs/heads/main/infrastructure/traefik-dynamic.yaml

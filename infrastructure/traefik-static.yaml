@@ -1,0 +1,45 @@
+#log:
+#  level: DEBUG
+
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+
+providers:
+  file:
+    directory: /etc/traefik/confs
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: ":443"
+
+  temp:
+    address: ":8080"
+
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: certs@rizexor.com
+      storage: /etc/traefik/acme.json
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+        - "1.1.1.1:53"
+        - "1.0.0.1:53"
+  cloudflare-staging:
+    acme:
+      email: certs@rizexor.com
+      storage: /etc/traefik/acme-staging.json
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+        - "1.1.1.1:53"
+        - "1.0.0.1:53"
