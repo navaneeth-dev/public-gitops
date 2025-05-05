@@ -20,9 +20,6 @@ entryPoints:
   websecure:
     address: ":443"
 
-  temp:
-    address: ":8080"
-
 certificatesResolvers:
   cloudflare:
     acme:

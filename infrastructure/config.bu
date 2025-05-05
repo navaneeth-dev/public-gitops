@@ -21,7 +21,9 @@ storage:
           [Container]
           ContainerName=traefik-proxy
           Image=docker.io/traefik
-          Exec=
+          Exec=--configFile=/etc/traefik/traefik.yaml
+          Volume=/etc/traefik:/etc/traefik:Z
+          Network=host
 
           [Install]
           WantedBy=multi-user.target
