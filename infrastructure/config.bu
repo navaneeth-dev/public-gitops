@@ -10,7 +10,7 @@ storage:
   - path: /etc/traefik/confs
     overwrite: false
   files:
-    - path: /etc/containers/systemd/hello.container
+    - path: /etc/containers/systemd/traefik.container
       contents:
         inline: |
           [Unit]
