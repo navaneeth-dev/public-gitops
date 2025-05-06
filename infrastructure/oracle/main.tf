@@ -1,9 +1,6 @@
 variable "ssh_public_key" {
 }
 
-variable "subnet" {
-}
-
 variable "instance_shape" {
   default = "VM.Standard.A1.Flex"
 }
@@ -17,6 +14,7 @@ data "oci_identity_availability_domain" "ad" {
   ad_number      = 1
 }
 
+// Create VCN, subnets and sec lists
 resource "oci_core_virtual_network" "talos_vcn" {
   cidr_block     = "10.0.0.0/16"
   compartment_id = var.compartment_ocid
@@ -24,91 +22,113 @@ resource "oci_core_virtual_network" "talos_vcn" {
   dns_label      = "talos"
 }
 
-resource "oci_core_subnet" "nodes_subnet" {
-  cidr_block        = "10.0.10.0/24"
-  display_name      = "nodes"
-  dns_label         = "nodes"
-  security_list_ids = [oci_core_security_list.test_security_list.id]
-  compartment_id    = var.compartment_ocid
-  vcn_id            = oci_core_virtual_network.test_vcn.id
-  route_table_id    = oci_core_route_table.test_route_table.id
-  dhcp_options_id   = oci_core_virtual_network.test_vcn.default_dhcp_options_id
+resource "oci_core_subnet" "nodes" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+  cidr_block     = "10.0.10.0/24"
+
+  display_name = "nodes"
+  dns_label    = "nodes"
+
+  # prohibit_internet_ingress = true
+  security_list_ids = []
+  route_table_id    = oci_core_route_table.route_table.id
+  dhcp_options_id   = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
 }
 
-# resource "oci_core_internet_gateway" "test_internet_gateway" {
-#   compartment_id = var.compartment_ocid
-#   display_name   = "testIG"
-#   vcn_id         = oci_core_virtual_network.test_vcn.id
-# }
+resource "oci_core_internet_gateway" "talos_internet_gateway" {
+  compartment_id = var.compartment_ocid
+  display_name   = "Internet Gateway"
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+}
 
-# resource "oci_core_route_table" "test_route_table" {
-#   compartment_id = var.compartment_ocid
-#   vcn_id         = oci_core_virtual_network.test_vcn.id
-#   display_name   = "testRouteTable"
+resource "oci_core_route_table" "route_table" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+  display_name   = "Route Table"
 
-#   route_rules {
-#     destination       = "0.0.0.0/0"
-#     destination_type  = "CIDR_BLOCK"
-#     network_entity_id = oci_core_internet_gateway.test_internet_gateway.id
-#   }
-# }
+  route_rules {
+    destination       = "0.0.0.0/0"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = oci_core_internet_gateway.talos_internet_gateway.id
+  }
+}
 
-# resource "oci_core_security_list" "test_security_list" {
-#   compartment_id = var.compartment_ocid
-#   vcn_id         = oci_core_virtual_network.test_vcn.id
-#   display_name   = "testSecurityList"
+resource "oci_core_default_security_list" "default_sec_list" {
+  manage_default_resource_id = oci_core_virtual_network.talos_vcn.default_security_list_id
 
-#   egress_security_rules {
-#     protocol    = "6"
-#     destination = "0.0.0.0/0"
-#   }
+  # Allow All Egress Traffic
+  egress_security_rules {
+    protocol    = "all"
+    destination = "0.0.0.0/0"
+  }
 
-#   ingress_security_rules {
-#     protocol = "6"
-#     source   = "0.0.0.0/0"
+  # Allow Kubenetes API server IPv4
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
 
-#     tcp_options {
-#       max = "22"
-#       min = "22"
-#     }
-#   }
+    tcp_options {
+      max = "6443"
+      min = "6443"
+    }
+  }
 
-#   ingress_security_rules {
-#     protocol = "6"
-#     source   = "0.0.0.0/0"
+  # Allow Talos Ingress
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
 
-#     tcp_options {
-#       max = "3000"
-#       min = "3000"
-#     }
-#   }
+    tcp_options {
+      max = "50000"
+      min = "50000"
+    }
+  }
+}
 
-#   ingress_security_rules {
-#     protocol = "6"
-#     source   = "0.0.0.0/0"
+resource "oci_network_load_balancer_network_load_balancer" "k8s_api" {
+  compartment_id = var.compartment_ocid
+  display_name   = "${var.cluster_name}-k8s-api-lb"
+  subnet_id      = oci_core_subnet.nodes.id
+  # is_private     = true  # Make the load balancer private
+}
 
-#     tcp_options {
-#       max = "3005"
-#       min = "3005"
-#     }
-#   }
+resource "oci_network_load_balancer_backend_set" "k8s_api" {
+  name                     = "${var.cluster_name}-k8s-api-backend"
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.k8s_api.id
+  policy                   = "FIVE_TUPLE"
 
-#   ingress_security_rules {
-#     protocol = "6"
-#     source   = "0.0.0.0/0"
+  health_checker {
+    protocol           = "TCP"
+    port               = 6443
+    interval_in_millis = 10000
+    timeout_in_millis  = 3000
+    retries            = 3
+  }
+}
 
-#     tcp_options {
-#       max = "80"
-#       min = "80"
-#     }
-#   }
-# }
+resource "oci_network_load_balancer_backend" "k8s_api" {
+  count                    = var.control_plane_count
+  backend_set_name         = oci_network_load_balancer_backend_set.k8s_api.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.k8s_api.id
+  port                     = 6443
+  ip_address               = oci_core_instance.controlplane[count.index].private_ip
+}
+
+# Create a listener for the load balancer
+resource "oci_network_load_balancer_listener" "k8s_api" {
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.k8s_api.id
+  name                     = "${var.cluster_name}-k8s-api-listener"
+  default_backend_set_name = oci_network_load_balancer_backend_set.k8s_api.name
+  port                     = 6443
+  protocol                 = "TCP"
+}
 
 variable "talos_image_ocid" {
 }
 
 /* Instances */
-resource "oci_core_instance" "talos_instances" {
+resource "oci_core_instance" "controlplane" {
   count = 3
 
   availability_domain = data.oci_identity_availability_domain.ad.name
@@ -117,12 +137,12 @@ resource "oci_core_instance" "talos_instances" {
   shape               = var.instance_shape
 
   shape_config {
-    ocpus = var.instance_ocpus
+    ocpus         = var.instance_ocpus
     memory_in_gbs = var.instance_shape_config_memory_in_gbs
   }
 
   create_vnic_details {
-    subnet_id        = var.subnet
+    subnet_id        = oci_core_subnet.nodes.id
     display_name     = "primaryvnic"
     assign_public_ip = true
     hostname_label   = "bom-talos-${count.index + 1}"
@@ -135,7 +155,7 @@ resource "oci_core_instance" "talos_instances" {
 
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
-    # user_data = base64encode(file("talos.yaml"))
+    user_data           = base64encode(data.talos_machine_configuration.this.machine_configuration)
   }
 }
 
