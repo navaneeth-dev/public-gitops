@@ -30,10 +30,22 @@ resource "oci_core_subnet" "nodes" {
   display_name = "nodes"
   dns_label    = "nodes"
 
-  # prohibit_internet_ingress = true
-  security_list_ids = []
-  route_table_id    = oci_core_route_table.route_table.id
-  dhcp_options_id   = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
+  prohibit_internet_ingress = true
+  route_table_id            = oci_core_route_table.route_table.id
+  dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
+}
+
+resource "oci_core_subnet" "loadbalancers" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+  cidr_block     = "10.0.60.0/24"
+
+  display_name = "loadbalancers"
+  dns_label    = "loadbalancers"
+
+  prohibit_internet_ingress = false
+  route_table_id            = oci_core_route_table.route_table.id
+  dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
 }
 
 resource "oci_core_internet_gateway" "talos_internet_gateway" {
@@ -86,41 +98,70 @@ resource "oci_core_default_security_list" "default_sec_list" {
   }
 }
 
-resource "oci_network_load_balancer_network_load_balancer" "k8s_api" {
+resource "oci_network_load_balancer_network_load_balancer" "talos" {
   compartment_id = var.compartment_ocid
-  display_name   = "${var.cluster_name}-k8s-api-lb"
-  subnet_id      = oci_core_subnet.nodes.id
-  # is_private     = true  # Make the load balancer private
+  display_name   = "talos"
+  subnet_id      = oci_core_subnet.loadbalancers.id
+  is_private     = false # Make the load balancer private
 }
 
+// K8S load balance
 resource "oci_network_load_balancer_backend_set" "k8s_api" {
   name                     = "${var.cluster_name}-k8s-api-backend"
-  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.k8s_api.id
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
   policy                   = "FIVE_TUPLE"
 
   health_checker {
-    protocol           = "TCP"
     port               = 6443
     interval_in_millis = 10000
-    timeout_in_millis  = 3000
-    retries            = 3
+    protocol           = "HTTPS"
+    return_code        = 401
+    url_path           = "/readyz"
   }
 }
 
 resource "oci_network_load_balancer_backend" "k8s_api" {
   count                    = var.control_plane_count
   backend_set_name         = oci_network_load_balancer_backend_set.k8s_api.name
-  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.k8s_api.id
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
   port                     = 6443
   ip_address               = oci_core_instance.controlplane[count.index].private_ip
 }
 
-# Create a listener for the load balancer
 resource "oci_network_load_balancer_listener" "k8s_api" {
-  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.k8s_api.id
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
   name                     = "${var.cluster_name}-k8s-api-listener"
   default_backend_set_name = oci_network_load_balancer_backend_set.k8s_api.name
   port                     = 6443
+  protocol                 = "TCP"
+}
+
+// Talos load balance
+resource "oci_network_load_balancer_backend_set" "talos" {
+  name                     = "${var.cluster_name}-talos-backend"
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
+  policy                   = "FIVE_TUPLE"
+
+  health_checker {
+    protocol           = "TCP"
+    port               = 50000
+    interval_in_millis = 10000
+  }
+}
+
+resource "oci_network_load_balancer_backend" "talos" {
+  count                    = var.control_plane_count
+  backend_set_name         = oci_network_load_balancer_backend_set.talos.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
+  port                     = 50000
+  ip_address               = oci_core_instance.controlplane[count.index].private_ip
+}
+
+resource "oci_network_load_balancer_listener" "talos" {
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
+  name                     = "${var.cluster_name}-talos-listener"
+  default_backend_set_name = oci_network_load_balancer_backend_set.talos.name
+  port                     = 50000
   protocol                 = "TCP"
 }
 
@@ -129,7 +170,7 @@ variable "talos_image_ocid" {
 
 /* Instances */
 resource "oci_core_instance" "controlplane" {
-  count = 3
+  count = var.control_plane_count
 
   availability_domain = data.oci_identity_availability_domain.ad.name
   compartment_id      = var.compartment_ocid
@@ -144,7 +185,7 @@ resource "oci_core_instance" "controlplane" {
   create_vnic_details {
     subnet_id        = oci_core_subnet.nodes.id
     display_name     = "primaryvnic"
-    assign_public_ip = true
+    assign_public_ip = false
     hostname_label   = "bom-talos-${count.index + 1}"
   }
 
@@ -154,8 +195,7 @@ resource "oci_core_instance" "controlplane" {
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_public_key
-    user_data           = base64encode(data.talos_machine_configuration.this.machine_configuration)
+    user_data = base64encode(data.talos_machine_configuration.this.machine_configuration)
   }
 }
 
