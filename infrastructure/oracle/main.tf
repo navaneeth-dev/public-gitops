@@ -7,7 +7,7 @@ variable "instance_shape" {
 
 variable "instance_ocpus" { default = 1 }
 
-variable "instance_shape_config_memory_in_gbs" { default = 1 }
+variable "instance_shape_config_memory_in_gbs" { default = 6 }
 
 data "oci_identity_availability_domain" "ad" {
   compartment_id = var.tenancy_ocid
@@ -22,6 +22,20 @@ resource "oci_core_virtual_network" "talos_vcn" {
   dns_label      = "talos"
 }
 
+resource "oci_core_internet_gateway" "talos_internet_gateway" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+
+  display_name = "Internet Gateway"
+}
+
+resource "oci_core_nat_gateway" "talos_nodes" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+
+  display_name = "NAT Gateway"
+}
+
 resource "oci_core_subnet" "nodes" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_virtual_network.talos_vcn.id
@@ -31,7 +45,6 @@ resource "oci_core_subnet" "nodes" {
   dns_label    = "nodes"
 
   prohibit_internet_ingress = true
-  route_table_id            = oci_core_route_table.route_table.id
   dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
 }
 
@@ -44,20 +57,25 @@ resource "oci_core_subnet" "loadbalancers" {
   dns_label    = "loadbalancers"
 
   prohibit_internet_ingress = false
-  route_table_id            = oci_core_route_table.route_table.id
+  route_table_id            = oci_core_route_table.internet_routing.id
   dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
 }
 
-resource "oci_core_internet_gateway" "talos_internet_gateway" {
-  compartment_id = var.compartment_ocid
-  display_name   = "Internet Gateway"
-  vcn_id         = oci_core_virtual_network.talos_vcn.id
+resource "oci_core_default_route_table" "nat_routing" {
+  manage_default_resource_id = oci_core_virtual_network.talos_vcn.default_route_table_id
+
+  route_rules {
+    destination       = "0.0.0.0/0"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = oci_core_nat_gateway.talos_nodes.id
+  }
 }
 
-resource "oci_core_route_table" "route_table" {
-  compartment_id = var.compartment_ocid
+resource "oci_core_route_table" "internet_routing" {
   vcn_id         = oci_core_virtual_network.talos_vcn.id
-  display_name   = "Route Table"
+  compartment_id = var.compartment_ocid
+
+  display_name = "Public Internet Routing"
 
   route_rules {
     destination       = "0.0.0.0/0"
@@ -121,7 +139,8 @@ resource "oci_network_load_balancer_backend_set" "k8s_api" {
 }
 
 resource "oci_network_load_balancer_backend" "k8s_api" {
-  count                    = var.control_plane_count
+  count = var.control_plane_count
+
   backend_set_name         = oci_network_load_balancer_backend_set.k8s_api.name
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
   port                     = 6443
@@ -150,7 +169,8 @@ resource "oci_network_load_balancer_backend_set" "talos" {
 }
 
 resource "oci_network_load_balancer_backend" "talos" {
-  count                    = var.control_plane_count
+  count = var.control_plane_count
+
   backend_set_name         = oci_network_load_balancer_backend_set.talos.name
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
   port                     = 50000

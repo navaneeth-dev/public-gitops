@@ -1,4 +1,5 @@
 talosconfig
+kubeconfig
 *.pem
 
 # Local .terraform directories
