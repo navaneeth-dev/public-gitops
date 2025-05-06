@@ -1,32 +1,7 @@
-variable "tenancy_ocid" {
-}
-
-variable "user_ocid" {
-}
-
-variable "fingerprint" {
-}
-
-variable "private_key_path" {
-  default = ""
-}
-
-variable "compartment_ocid" {
-}
-
 variable "ssh_public_key" {
 }
 
-variable "region" {
-    default = "ap-mumbai-1"
-}
-
-provider "oci" {
-  region           = var.region
-  tenancy_ocid     = var.tenancy_ocid
-  user_ocid        = var.user_ocid
-  fingerprint      = var.fingerprint
-  private_key_path = var.private_key_path
+variable "subnet" {
 }
 
 variable "instance_shape" {
@@ -42,23 +17,23 @@ data "oci_identity_availability_domain" "ad" {
   ad_number      = 1
 }
 
-# resource "oci_core_virtual_network" "talos_vcn" {
-#   cidr_block     = "10.0.0.0/16"
-#   compartment_id = var.compartment_ocid
-#   display_name   = "talos"
-#   dns_label      = "talos"
-# }
+resource "oci_core_virtual_network" "talos_vcn" {
+  cidr_block     = "10.0.0.0/16"
+  compartment_id = var.compartment_ocid
+  display_name   = "talos"
+  dns_label      = "talos"
+}
 
-# resource "oci_core_subnet" "nodes_subnet" {
-#   cidr_block        = "10.0.10.0/24"
-#   display_name      = "nodes"
-#   dns_label         = "nodes"
-#   security_list_ids = [oci_core_security_list.test_security_list.id]
-#   compartment_id    = var.compartment_ocid
-#   vcn_id            = oci_core_virtual_network.test_vcn.id
-#   route_table_id    = oci_core_route_table.test_route_table.id
-#   dhcp_options_id   = oci_core_virtual_network.test_vcn.default_dhcp_options_id
-# }
+resource "oci_core_subnet" "nodes_subnet" {
+  cidr_block        = "10.0.10.0/24"
+  display_name      = "nodes"
+  dns_label         = "nodes"
+  security_list_ids = [oci_core_security_list.test_security_list.id]
+  compartment_id    = var.compartment_ocid
+  vcn_id            = oci_core_virtual_network.test_vcn.id
+  route_table_id    = oci_core_route_table.test_route_table.id
+  dhcp_options_id   = oci_core_virtual_network.test_vcn.default_dhcp_options_id
+}
 
 # resource "oci_core_internet_gateway" "test_internet_gateway" {
 #   compartment_id = var.compartment_ocid
@@ -129,11 +104,16 @@ data "oci_identity_availability_domain" "ad" {
 #   }
 # }
 
+variable "talos_image_ocid" {
+}
+
 /* Instances */
-resource "oci_core_instance" "bom-talos-1" {
+resource "oci_core_instance" "talos_instances" {
+  count = 3
+
   availability_domain = data.oci_identity_availability_domain.ad.name
   compartment_id      = var.compartment_ocid
-  display_name        = "bom-talos-1"
+  display_name        = "bom-talos-${count.index + 1}"
   shape               = var.instance_shape
 
   shape_config {
@@ -145,16 +125,17 @@ resource "oci_core_instance" "bom-talos-1" {
     subnet_id        = var.subnet
     display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label   = "bom-talos-1"
+    hostname_label   = "bom-talos-${count.index + 1}"
   }
 
   source_details {
     source_type = "image"
-    source_id   = lookup(data.oci_core_images.test_images.images[0], "id")
+    source_id   = var.talos_image_ocid
   }
 
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
+    # user_data = base64encode(file("talos.yaml"))
   }
 }
 
@@ -167,16 +148,6 @@ resource "oci_core_instance" "bom-talos-1" {
 # data "oci_core_vnic" "app_vnic" {
 #   vnic_id = data.oci_core_vnic_attachments.app_vnics.vnic_attachments[0]["vnic_id"]
 # }
-
-# See https://docs.oracle.com/iaas/images/
-data "oci_core_images" "test_images" {
-  compartment_id           = var.compartment_ocid
-  operating_system         = "Oracle Linux"
-  operating_system_version = "8"
-  shape                    = var.instance_shape
-  sort_by                  = "TIMECREATED"
-  sort_order               = "DESC"
-}
 
 # output "app" {
 #   value = "http://${data.oci_core_vnic.app_vnic.public_ip_address}"
