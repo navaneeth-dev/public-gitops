@@ -18,3 +18,8 @@ tasks:
     - task: destory
     - task: default
     silent: true
+
+  configs:
+    cmds:
+      - terraform output -raw talosconfig > ./talosconfig
+      - terraform output -raw kubeconfig > ./kubeconfig

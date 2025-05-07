@@ -84,6 +84,78 @@ resource "oci_core_route_table" "internet_routing" {
   }
 }
 
+resource "oci_core_security_list" "loadbalancers_sec_list" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+
+  # IPv4: Allow all egress traffic
+  egress_security_rules {
+    protocol    = "all"
+    destination = "0.0.0.0/0"
+  }
+
+  # IPv6: Allow all egress traffic
+  egress_security_rules {
+    protocol    = "all"
+    destination = "::0/0"
+  }
+
+  # IPv4: Allow HTTPS
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "443"
+      min = "443"
+    }
+  }
+
+  # IPv4: Allow HTTP
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "80"
+      min = "80"
+    }
+  }
+
+  # IPv6: Allow HTTPS
+  ingress_security_rules {
+    protocol = "6"
+    source   = "::0/0"
+
+    tcp_options {
+      max = "443"
+      min = "443"
+    }
+  }
+
+  # IPv6: Allow HTTP
+  ingress_security_rules {
+    protocol = "6"
+    source   = "::0/0"
+
+    tcp_options {
+      max = "80"
+      min = "80"
+    }
+  }
+
+  # IPv4: Allow SSH
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "443"
+      min = "443"
+    }
+  }
+}
+
 resource "oci_core_default_security_list" "default_sec_list" {
   manage_default_resource_id = oci_core_virtual_network.talos_vcn.default_security_list_id
 
