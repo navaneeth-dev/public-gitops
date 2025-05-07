@@ -18,6 +18,9 @@
 
   sops.secrets.CLOUDFLARE_DNS_API_TOKEN.owner = config.users.users.traefik.name;
 
+  networking.nftables.enable = true;
+  networking.firewall.enable = false;
+
   boot.loader.grub = {
     # no need to set devices, disko will add all devices that have a EF02 partition to the list already
     # devices = [ ];
