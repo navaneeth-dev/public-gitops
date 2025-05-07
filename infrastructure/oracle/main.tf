@@ -20,6 +20,7 @@ resource "oci_core_virtual_network" "talos_vcn" {
   compartment_id = var.compartment_ocid
   display_name   = "talos"
   dns_label      = "talos"
+  is_ipv6enabled = true
 }
 
 resource "oci_core_internet_gateway" "talos_internet_gateway" {
@@ -58,6 +59,7 @@ resource "oci_core_subnet" "loadbalancers" {
 
   prohibit_internet_ingress = false
   route_table_id            = oci_core_route_table.internet_routing.id
+  security_list_ids         = [oci_core_security_list.loadbalancers_sec_list.id]
   dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
 }
 
@@ -87,6 +89,7 @@ resource "oci_core_route_table" "internet_routing" {
 resource "oci_core_security_list" "loadbalancers_sec_list" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_virtual_network.talos_vcn.id
+  display_name   = "Load Balancer security list"
 
   # IPv4: Allow all egress traffic
   egress_security_rules {
@@ -150,8 +153,19 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
     source   = "0.0.0.0/0"
 
     tcp_options {
-      max = "443"
-      min = "443"
+      max = "22"
+      min = "22"
+    }
+  }
+
+  # IPv6: Allow SSH
+  ingress_security_rules {
+    protocol = "6"
+    source   = "::0/0"
+
+    tcp_options {
+      max = "22"
+      min = "22"
     }
   }
 }
@@ -294,7 +308,8 @@ resource "oci_core_instance" "controlplane" {
   }
 
   metadata = {
-    user_data = base64encode(data.talos_machine_configuration.this.machine_configuration)
+    user_data           = base64encode(data.talos_machine_configuration.this.machine_configuration)
+    ssh_authorized_keys = var.ssh_public_key
   }
 }
 
@@ -336,6 +351,7 @@ resource "oci_core_instance" "loadbalancers" {
 
   metadata = {
     user_data = base64encode("#cloud-config\n${local.loadbalancer_cloud_init}")
+
   }
 }
 
