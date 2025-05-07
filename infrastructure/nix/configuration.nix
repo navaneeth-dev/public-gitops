@@ -16,7 +16,7 @@
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";
 
-  sops.secrets.CLOUDFLARE_DNS_API_TOKEN = {};
+  sops.secrets.CLOUDFLARE_DNS_API_TOKEN.owner = config.users.users.traefik.name;
 
   boot.loader.grub = {
     # no need to set devices, disko will add all devices that have a EF02 partition to the list already
@@ -51,11 +51,10 @@
         };
       };
 
-      # log = {
-      #   level = "INFO";
-      #   filePath = "${config.services.traefik.dataDir}/traefik.log";
-      #   format = "json";
-      # };
+      log = {
+        level = "INFO";
+        filePath = "${config.services.traefik.dataDir}/traefik.log";
+      };
 
       certificatesResolvers = {
         # cloudflare.acme = {
