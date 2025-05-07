@@ -16,6 +16,8 @@
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";
 
+  sops.secrets.CLOUDFLARE_DNS_API_TOKEN = {};
+
   boot.loader.grub = {
     # no need to set devices, disko will add all devices that have a EF02 partition to the list already
     # devices = [ ];
@@ -26,6 +28,10 @@
 
   services.traefik = {
     enable = true;
+
+    environment = {
+      CLOUDFLARE_DNS_API_TOKEN_FILE = "/run/secrets/CLOUDFLARE_DNS_API_TOKEN"
+    }
 
     staticConfigOptions = {
       entryPoints = {
