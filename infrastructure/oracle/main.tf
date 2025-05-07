@@ -87,13 +87,19 @@ resource "oci_core_route_table" "internet_routing" {
 resource "oci_core_default_security_list" "default_sec_list" {
   manage_default_resource_id = oci_core_virtual_network.talos_vcn.default_security_list_id
 
-  # Allow All Egress Traffic
+  # IPv4: Allow all egress traffic
   egress_security_rules {
     protocol    = "all"
     destination = "0.0.0.0/0"
   }
 
-  # Allow Kubenetes API server IPv4
+  # IPv4: Allow all internal communication in the subnet for Kubernetes
+  ingress_security_rules {
+    protocol = "all"
+    source   = "10.0.10.0/24"
+  }
+
+  # IPv4: Allow loadbalancer to talk to Kubenetes API server
   ingress_security_rules {
     protocol = "6"
     source   = "0.0.0.0/0"
@@ -104,7 +110,7 @@ resource "oci_core_default_security_list" "default_sec_list" {
     }
   }
 
-  # Allow Talos Ingress
+  # IPv4: Allow loadbalancer to talk to Talos API server
   ingress_security_rules {
     protocol = "6"
     source   = "0.0.0.0/0"
