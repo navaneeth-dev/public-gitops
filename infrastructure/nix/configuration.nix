@@ -141,9 +141,9 @@
 
         services = {
           ingress.loadBalancer.servers = [
-            { url = "http://10.0.10.98"; }
-            { url = "http://10.0.10.149"; }
-            { url = "http://10.0.10.54"; }
+            { url = "http://10.0.10.2"; }
+            { url = "http://10.0.10.3"; }
+            { url = "http://10.0.10.4"; }
           ];
         };
       };

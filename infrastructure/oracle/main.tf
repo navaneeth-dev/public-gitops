@@ -225,16 +225,52 @@ resource "oci_core_instance" "controlplane" {
   }
 }
 
-# data "oci_core_vnic_attachments" "app_vnics" {
-#   compartment_id      = var.compartment_ocid
-#   availability_domain = data.oci_identity_availability_domain.ad.name
-#   instance_id         = oci_core_instance.free_instance0.id
-# }
+locals {
+  loadbalancer_cloud_init = yamlencode({
+    runcmd = [
+      "curl -L https://github.com/nix-community/nixos-images/releases/latest/download/nixos-kexec-installer-noninteractive-x86_64-linux.tar.gz | tar -xzf- -C /root",
+      "/root/kexec/run"
+    ]
+  })
+}
 
-# data "oci_core_vnic" "app_vnic" {
-#   vnic_id = data.oci_core_vnic_attachments.app_vnics.vnic_attachments[0]["vnic_id"]
-# }
+resource "oci_core_instance" "loadbalancers" {
+  count = var.loadbalancer_count
 
-# output "app" {
-#   value = "http://${data.oci_core_vnic.app_vnic.public_ip_address}"
-# }
+  availability_domain = data.oci_identity_availability_domain.ad.name
+  compartment_id      = var.compartment_ocid
+  display_name        = "bom-loadbalancer-${count.index + 1}"
+  shape               = var.instance_shape
+
+  shape_config {
+    ocpus         = var.instance_ocpus
+    memory_in_gbs = var.loadbalancer_memory
+  }
+
+  create_vnic_details {
+    subnet_id        = oci_core_subnet.loadbalancers.id
+    display_name     = "primaryvnic"
+    assign_public_ip = true
+    hostname_label   = "bom-loadbalancer-${count.index + 1}"
+
+    private_ip = "10.0.10.${count.index + 2}"
+  }
+
+  source_details {
+    source_type = "image"
+    source_id   = data.oci_core_images.ubuntu.id
+  }
+
+  metadata = {
+    user_data = base64encode("#cloud-config\n${local.loadbalancer_cloud_init}")
+  }
+}
+
+data "oci_core_images" "ubuntu" {
+  compartment_id = var.compartment_ocid
+
+  operating_system = "Canonical Ubuntu 24.04"
+  sort_by          = "TIMECREATED"
+  sort_order       = "DESC"
+  shape            = "VM.Standard.E4.Flex"
+}

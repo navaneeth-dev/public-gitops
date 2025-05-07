@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - terraform apply -auto-approve
+    silent: true
+
+  destory:
+    cmds:
+      - terraform destroy -auto-approve
+    silent: true
+
+  reapply:
+    cmds:
+    - task: destory
+    - task: default
+    silent: true
