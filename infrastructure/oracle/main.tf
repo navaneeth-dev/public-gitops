@@ -213,6 +213,7 @@ resource "oci_core_instance" "controlplane" {
     display_name     = "primaryvnic"
     assign_public_ip = false
     hostname_label   = "bom-talos-${count.index + 1}"
+    private_ip       = "10.0.10.${count.index + 2}"
   }
 
   source_details {
@@ -253,7 +254,7 @@ resource "oci_core_instance" "loadbalancers" {
     assign_public_ip = true
     hostname_label   = "bom-loadbalancer-${count.index + 1}"
 
-    private_ip = "10.0.10.${count.index + 2}"
+    private_ip = "10.0.60.${count.index + 2}"
   }
 
   source_details {
