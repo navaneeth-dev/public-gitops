@@ -240,7 +240,7 @@ resource "oci_core_instance" "loadbalancers" {
   availability_domain = data.oci_identity_availability_domain.ad.name
   compartment_id      = var.compartment_ocid
   display_name        = "bom-loadbalancer-${count.index + 1}"
-  shape               = var.instance_shape
+  shape               = var.loadbalancer_shape
 
   shape_config {
     ocpus         = var.instance_ocpus
@@ -258,7 +258,7 @@ resource "oci_core_instance" "loadbalancers" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.ubuntu.id
+    source_id   = data.oci_core_images.ubuntu.images[0].id
   }
 
   metadata = {
@@ -269,8 +269,8 @@ resource "oci_core_instance" "loadbalancers" {
 data "oci_core_images" "ubuntu" {
   compartment_id = var.compartment_ocid
 
-  operating_system = "Canonical Ubuntu 24.04"
+  operating_system = "Canonical Ubuntu"
   sort_by          = "TIMECREATED"
   sort_order       = "DESC"
-  shape            = "VM.Standard.E4.Flex"
+  shape            = var.loadbalancer_shape
 }
