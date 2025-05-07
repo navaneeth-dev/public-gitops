@@ -26,12 +26,12 @@
   };
   services.openssh.enable = true;
 
+  systemd.services.traefik.environment = {
+      CLOUDFLARE_DNS_API_TOKEN_FILE = "/run/secrets/CLOUDFLARE_DNS_API_TOKEN";
+  };
+
   services.traefik = {
     enable = true;
-
-    environment = {
-      CLOUDFLARE_DNS_API_TOKEN_FILE = "/run/secrets/CLOUDFLARE_DNS_API_TOKEN"
-    }
 
     staticConfigOptions = {
       entryPoints = {
