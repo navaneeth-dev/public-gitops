@@ -49,8 +49,8 @@ data "talos_machine_configuration" "this" {
 # Bootstrap 1 controlplane
 resource "talos_machine_bootstrap" "this" {
   depends_on = [
-    oci_network_load_balancer_network_load_balancer.talos,
-    oci_network_load_balancer_listener.k8s_api
+    oci_network_load_balancer_backend.talos,
+    oci_network_load_balancer_backend.k8s_api
   ]
 
   endpoint             = local.endpoint
