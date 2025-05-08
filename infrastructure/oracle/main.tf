@@ -288,6 +288,7 @@ resource "oci_core_instance" "controlplane" {
   compartment_id      = var.compartment_ocid
   display_name        = "bom-talos-${count.index + 1}"
   shape               = var.instance_shape
+  fault_domain        = "FAULT-DOMAIN-${count.index + 1}"
 
   shape_config {
     ocpus         = var.instance_ocpus
@@ -308,8 +309,7 @@ resource "oci_core_instance" "controlplane" {
   }
 
   metadata = {
-    user_data           = base64encode(data.talos_machine_configuration.this.machine_configuration)
-    ssh_authorized_keys = var.ssh_public_key
+    user_data = base64encode(data.talos_machine_configuration.this.machine_configuration)
   }
 }
 
@@ -350,8 +350,8 @@ resource "oci_core_instance" "loadbalancers" {
   }
 
   metadata = {
-    user_data = base64encode("#cloud-config\n${local.loadbalancer_cloud_init}")
-
+    user_data           = base64encode("#cloud-config\n${local.loadbalancer_cloud_init}")
+    ssh_authorized_keys = var.ssh_public_key
   }
 }
 
