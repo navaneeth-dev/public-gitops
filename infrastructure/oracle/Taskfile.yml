@@ -21,16 +21,26 @@ tasks:
 
   bootstrap:
     cmds:
-      - ssh -M -S bastion -fNL 50000:10.0.60.200:50000 $(terraform output -raw bastion)
-      - talosctl --talosconfig ./talosconfig dashboard
-      - talosctl --talosconfig ./talosconfig bootstrap -n 10.0.10.2
-      - talosctl --talosconfig ./talosconfig health -n 10.0.10.2
-      - defer: ssh -S bastion -O exit $(terraform output -raw bastion)
+    - task: portfwd
+    - talosctl --talosconfig ./talosconfig dashboard
+    - talosctl --talosconfig ./talosconfig bootstrap -n 10.0.10.2
+    - talosctl --talosconfig ./talosconfig health -n 10.0.10.2
+    - defer: cancelportfwd
     silent: true
 
   portfwd:
     cmds:
-      - ssh -M -S bastion -fNL 50000:10.0.60.200:50000 $(terraform output -raw bastion)
+    - ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 $(terraform output -raw bastion_session_talos)
+    - task: bastion_k8s
+
+  bastion_k8s:
+    cmd: ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 $(terraform output -raw bastion_session_k8s_api)
+    silent: true
+
+  cancelportfwd:
+    cmds:
+    - ssh -S bastion_session_talos -O exit $(terraform output -raw bastion_session_talos)
+    - ssh -S bastion_session_k8s_api -O exit $(terraform output -raw bastion_session_k8s_api)
 
   configs:
     cmds:

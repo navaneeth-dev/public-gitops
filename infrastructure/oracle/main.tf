@@ -139,7 +139,7 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
     }
   }
 
-  # IPv4: Allow Request From Bastion
+  # IPv4: Allow Talos from Bastion
   ingress_security_rules {
     protocol = "6"
     source   = "10.0.30.0/24"
@@ -147,6 +147,17 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
     tcp_options {
       max = "50000"
       min = "50000"
+    }
+  }
+
+  # IPv4: Allow K8S from Bastion
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.30.0/24"
+
+    tcp_options {
+      max = "6443"
+      min = "6443"
     }
   }
 
@@ -206,7 +217,7 @@ resource "oci_core_security_list" "bastion_sec_list" {
     destination = "0.0.0.0/0"
   }
 
-  # IPv4: Allow Talos
+  # IPv4: Allow Talos traffic
   ingress_security_rules {
     protocol = "6"
     source   = "0.0.0.0/0"
@@ -217,14 +228,14 @@ resource "oci_core_security_list" "bastion_sec_list" {
     }
   }
 
-  # IPv6: Allow Talos
+  # IPv4: Allow K8S traffic
   ingress_security_rules {
     protocol = "6"
-    source   = "::/0"
+    source   = "0.0.0.0/0"
 
     tcp_options {
-      max = "50000"
-      min = "50000"
+      max = "6443"
+      min = "6443"
     }
   }
 }
@@ -361,9 +372,28 @@ resource "oci_bastion_session" "talos_session" {
     target_resource_port               = 50000
   }
 
-  # provisioner "local-exec" {
-  #   command = "ssh -N -L 50000:10.0.0.2:22 -p 22 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
-  # }
+  provisioner "local-exec" {
+    command = "sleep 2; ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+  }
+}
+
+# Kubernetes API Access
+resource "oci_bastion_session" "k8s_api_session" {
+  bastion_id   = oci_bastion_bastion.talos.id
+  display_name = "Port_Forward_K8S_API"
+
+  key_details {
+    public_key_content = var.ssh_public_key
+  }
+  target_resource_details {
+    session_type                       = "PORT_FORWARDING"
+    target_resource_private_ip_address = oci_network_load_balancer_network_load_balancer.talos.assigned_private_ipv4
+    target_resource_port               = 6443
+  }
+
+  provisioner "local-exec" {
+    command = "sleep 2; ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 ${oci_bastion_session.k8s_api_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+  }
 }
 
 /* Instances */
