@@ -260,7 +260,7 @@ resource "oci_network_load_balancer_network_load_balancer" "talos" {
   compartment_id = var.compartment_ocid
   display_name   = "talos"
   subnet_id      = oci_core_subnet.loadbalancers.id
-  is_private     = false # Make the load balancer private
+  is_private     = true # Make the load balancer private
 
   assigned_private_ipv4 = "10.0.60.200"
 }
@@ -336,6 +336,7 @@ resource "oci_bastion_bastion" "talos" {
   client_cidr_block_allow_list = ["0.0.0.0/0"]
 }
 
+# Talos API Load Balancer Access Bastion
 resource "oci_bastion_session" "talos_session" {
   bastion_id   = oci_bastion_bastion.talos.id
   display_name = "Port_Forward_Talos"
@@ -345,9 +346,13 @@ resource "oci_bastion_session" "talos_session" {
   }
   target_resource_details {
     session_type                       = "PORT_FORWARDING"
-    target_resource_private_ip_address = "10.0.0.2"
+    target_resource_private_ip_address = local.endpoint
     target_resource_port               = 50000
   }
+
+  # provisioner "local-exec" {
+  #   command = "ssh -N -L 50000:10.0.0.2:22 -p 22 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+  # }
 }
 
 /* Instances */
