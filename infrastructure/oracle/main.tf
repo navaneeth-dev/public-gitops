@@ -114,7 +114,7 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
   # IPv6: Allow all egress traffic
   egress_security_rules {
     protocol    = "all"
-    destination = "::0/0"
+    destination = "::/0"
   }
 
   # IPv4: Allow HTTPS
@@ -142,7 +142,7 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
   # IPv6: Allow HTTPS
   ingress_security_rules {
     protocol = "6"
-    source   = "::0/0"
+    source   = "::/0"
 
     tcp_options {
       max = "443"
@@ -153,7 +153,7 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
   # IPv6: Allow HTTP
   ingress_security_rules {
     protocol = "6"
-    source   = "::0/0"
+    source   = "::/0"
 
     tcp_options {
       max = "80"
@@ -175,7 +175,7 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
   # IPv6: Allow SSH
   ingress_security_rules {
     protocol = "6"
-    source   = "::0/0"
+    source   = "::/0"
 
     tcp_options {
       max = "22"
@@ -209,7 +209,7 @@ resource "oci_core_security_list" "bastion_sec_list" {
   # IPv6: Allow Talos
   ingress_security_rules {
     protocol = "6"
-    source   = "::0/0"
+    source   = "::/0"
 
     tcp_options {
       max = "50000"
