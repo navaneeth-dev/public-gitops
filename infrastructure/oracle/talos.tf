@@ -101,7 +101,7 @@ output "talosconfig" {
   sensitive = true
 }
 
-# output "bastion" {
-#   value       = "${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
-#   description = "Bastion SSH"
-# }
+output "bastion" {
+  value       = "${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+  description = "Bastion SSH"
+}

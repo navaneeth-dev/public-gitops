@@ -139,6 +139,17 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
     }
   }
 
+  # IPv4: Allow Request From Bastion
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.30.0/24"
+
+    tcp_options {
+      max = "50000"
+      min = "50000"
+    }
+  }
+
   # IPv6: Allow HTTPS
   ingress_security_rules {
     protocol = "6"
