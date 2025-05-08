@@ -63,6 +63,20 @@ resource "oci_core_subnet" "loadbalancers" {
   dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
 }
 
+resource "oci_core_subnet" "bastion" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+  cidr_block     = "10.0.30.0/24"
+
+  display_name = "bastion"
+  dns_label    = "bastion"
+
+  prohibit_internet_ingress = false
+  route_table_id            = oci_core_route_table.internet_routing.id
+  security_list_ids         = [oci_core_security_list.bastion_sec_list.id]
+  dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
+}
+
 resource "oci_core_default_route_table" "nat_routing" {
   manage_default_resource_id = oci_core_virtual_network.talos_vcn.default_route_table_id
 
@@ -170,6 +184,40 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
   }
 }
 
+resource "oci_core_security_list" "bastion_sec_list" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+  display_name   = "Bastion security list"
+
+  # IPv4: Allow all egress traffic
+  egress_security_rules {
+    protocol    = "all"
+    destination = "0.0.0.0/0"
+  }
+
+  # IPv4: Allow Talos
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "50000"
+      min = "50000"
+    }
+  }
+
+  # IPv6: Allow Talos
+  ingress_security_rules {
+    protocol = "6"
+    source   = "::0/0"
+
+    tcp_options {
+      max = "50000"
+      min = "50000"
+    }
+  }
+}
+
 resource "oci_core_default_security_list" "default_sec_list" {
   manage_default_resource_id = oci_core_virtual_network.talos_vcn.default_security_list_id
 
@@ -213,6 +261,8 @@ resource "oci_network_load_balancer_network_load_balancer" "talos" {
   display_name   = "talos"
   subnet_id      = oci_core_subnet.loadbalancers.id
   is_private     = false # Make the load balancer private
+
+  assigned_private_ipv4 = "10.0.60.200"
 }
 
 // K8S load balance
@@ -277,10 +327,31 @@ resource "oci_network_load_balancer_listener" "talos" {
   protocol                 = "TCP"
 }
 
-variable "talos_image_ocid" {
+resource "oci_bastion_bastion" "talos" {
+  bastion_type     = "standard"
+  compartment_id   = var.compartment_ocid
+  target_subnet_id = oci_core_subnet.bastion.id
+
+  client_cidr_block_allow_list = ["0.0.0.0/0"]
+}
+
+resource "oci_bastion_session" "talos_session" {
+  bastion_id   = oci_bastion_bastion.talos.id
+  display_name = "Port Forward Talos"
+
+  key_details {
+    public_key_content = var.ssh_public_key
+  }
+  target_resource_details {
+    session_type                       = "PORT_FORWARDING"
+    target_resource_private_ip_address = "10.0.0.2"
+  }
 }
 
 /* Instances */
+variable "talos_image_ocid" {
+}
+
 resource "oci_core_instance" "controlplane" {
   count = var.control_plane_count
 
