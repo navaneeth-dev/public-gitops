@@ -10,7 +10,7 @@ resource "talos_machine_secrets" "this" {}
 
 locals {
   # L4 Load balancer endpoint for talos and k8s api
-  endpoint = oci_network_load_balancer_network_load_balancer.talos.assigned_private_ipv4
+  endpoint = "127.0.0.1"
 }
 
 # Controlplane config

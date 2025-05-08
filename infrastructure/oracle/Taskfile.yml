@@ -21,10 +21,16 @@ tasks:
 
   bootstrap:
     cmds:
-      - ssh -N -L 50000:10.0.0.2:22 -p 22 $(terraform output -raw bastion)
-      # - talosctl --talosconfig boostrap -n 10.0.10.2
-      # - talosctl --talosconfig health
+      - ssh -M -S bastion -fNL 50000:10.0.60.200:50000 $(terraform output -raw bastion)
+      - talosctl --talosconfig ./talosconfig dashboard
+      - talosctl --talosconfig ./talosconfig bootstrap -n 10.0.10.2
+      - talosctl --talosconfig ./talosconfig health -n 10.0.10.2
+      - defer: ssh -S bastion -O exit $(terraform output -raw bastion)
     silent: true
+
+  portfwd:
+    cmds:
+      - ssh -M -S bastion -fNL 50000:10.0.60.200:50000 $(terraform output -raw bastion)
 
   configs:
     cmds:

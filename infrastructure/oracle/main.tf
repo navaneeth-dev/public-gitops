@@ -357,7 +357,7 @@ resource "oci_bastion_session" "talos_session" {
   }
   target_resource_details {
     session_type                       = "PORT_FORWARDING"
-    target_resource_private_ip_address = local.endpoint
+    target_resource_private_ip_address = oci_network_load_balancer_network_load_balancer.talos.assigned_private_ipv4
     target_resource_port               = 50000
   }
 
