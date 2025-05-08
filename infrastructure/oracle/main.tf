@@ -328,16 +328,17 @@ resource "oci_network_load_balancer_listener" "talos" {
 }
 
 resource "oci_bastion_bastion" "talos" {
-  bastion_type     = "standard"
+  bastion_type     = "STANDARD"
   compartment_id   = var.compartment_ocid
   target_subnet_id = oci_core_subnet.bastion.id
+  name             = "Talos"
 
   client_cidr_block_allow_list = ["0.0.0.0/0"]
 }
 
 resource "oci_bastion_session" "talos_session" {
   bastion_id   = oci_bastion_bastion.talos.id
-  display_name = "Port Forward Talos"
+  display_name = "Port_Forward_Talos"
 
   key_details {
     public_key_content = var.ssh_public_key
@@ -345,6 +346,7 @@ resource "oci_bastion_session" "talos_session" {
   target_resource_details {
     session_type                       = "PORT_FORWARDING"
     target_resource_private_ip_address = "10.0.0.2"
+    target_resource_port               = 50000
   }
 }
 

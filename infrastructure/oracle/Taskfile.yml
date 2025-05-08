@@ -19,6 +19,13 @@ tasks:
     - task: default
     silent: true
 
+  bootstrap:
+    cmds:
+      - ssh -N -L 50000:10.0.0.2:22 -p 22 $(terraform output -raw bastion)
+      # - talosctl --talosconfig boostrap -n 10.0.10.2
+      # - talosctl --talosconfig health
+    silent: true
+
   configs:
     cmds:
       - terraform output -raw talosconfig > ./talosconfig
