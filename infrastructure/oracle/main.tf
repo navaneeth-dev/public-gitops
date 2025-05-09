@@ -113,6 +113,12 @@ resource "oci_core_route_table" "internet_routing" {
     destination_type  = "CIDR_BLOCK"
     network_entity_id = oci_core_internet_gateway.talos_internet_gateway.id
   }
+
+  route_rules {
+    destination       = "::/0"
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = oci_core_internet_gateway.talos_internet_gateway.id
+  }
 }
 
 resource "oci_core_security_list" "loadbalancers_sec_list" {
