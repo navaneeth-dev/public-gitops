@@ -67,7 +67,7 @@ resource "null_resource" "talos" {
     always_run = "${timestamp()}"
   }
   provisioner "local-exec" {
-    command = "sleep 2; ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+    command = "sleep 5; ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
   }
 }
 
@@ -77,7 +77,7 @@ resource "null_resource" "k8s_api" {
     always_run = "${timestamp()}"
   }
   provisioner "local-exec" {
-    command = "sleep 2; ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 ${oci_bastion_session.k8s_api_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+    command = "sleep 5; ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 ${oci_bastion_session.k8s_api_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
   }
 }
 
