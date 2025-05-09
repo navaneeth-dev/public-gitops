@@ -57,6 +57,20 @@ resource "oci_core_subnet" "loadbalancers" {
   display_name = "loadbalancers"
   dns_label    = "loadbalancers"
 
+  prohibit_internet_ingress = true
+  route_table_id            = oci_core_route_table.internet_routing.id
+  security_list_ids         = [oci_core_security_list.loadbalancers_sec_list.id]
+  dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
+}
+
+resource "oci_core_subnet" "public_lbs" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+  cidr_block     = "10.0.70.0/24"
+
+  display_name = "public_lbs"
+  dns_label    = "public_lbs"
+
   prohibit_internet_ingress = false
   route_table_id            = oci_core_route_table.internet_routing.id
   security_list_ids         = [oci_core_security_list.loadbalancers_sec_list.id]
@@ -71,7 +85,7 @@ resource "oci_core_subnet" "bastion" {
   display_name = "bastion"
   dns_label    = "bastion"
 
-  prohibit_internet_ingress = false
+  prohibit_internet_ingress = true
   route_table_id            = oci_core_route_table.internet_routing.id
   security_list_ids         = [oci_core_security_list.bastion_sec_list.id]
   dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
@@ -103,7 +117,52 @@ resource "oci_core_route_table" "internet_routing" {
 resource "oci_core_security_list" "loadbalancers_sec_list" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_virtual_network.talos_vcn.id
-  display_name   = "Load Balancer security list"
+  display_name   = "Private Load Balancer security list"
+
+  # IPv4: Allow all egress traffic
+  egress_security_rules {
+    protocol    = "all"
+    destination = "0.0.0.0/0"
+  }
+
+  # IPv4: Allow Talos from Bastion
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.30.0/24"
+
+    tcp_options {
+      max = "50000"
+      min = "50000"
+    }
+  }
+
+  # IPv4: Allow K8S from Bastion
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.30.0/24"
+
+    tcp_options {
+      max = "6443"
+      min = "6443"
+    }
+  }
+
+  # IPv4: Allow SSH from Bastion
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.30.0/24"
+
+    tcp_options {
+      max = "22"
+      min = "22"
+    }
+  }
+}
+
+resource "oci_core_security_list" "public_lbs_sec_list" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_virtual_network.talos_vcn.id
+  display_name   = "Public Load Balancer security list"
 
   # IPv4: Allow all egress traffic
   egress_security_rules {
@@ -139,28 +198,6 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
     }
   }
 
-  # IPv4: Allow Talos from Bastion
-  ingress_security_rules {
-    protocol = "6"
-    source   = "10.0.30.0/24"
-
-    tcp_options {
-      max = "50000"
-      min = "50000"
-    }
-  }
-
-  # IPv4: Allow K8S from Bastion
-  ingress_security_rules {
-    protocol = "6"
-    source   = "10.0.30.0/24"
-
-    tcp_options {
-      max = "6443"
-      min = "6443"
-    }
-  }
-
   # IPv6: Allow HTTPS
   ingress_security_rules {
     protocol = "6"
@@ -180,28 +217,6 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
     tcp_options {
       max = "80"
       min = "80"
-    }
-  }
-
-  # IPv4: Allow SSH
-  ingress_security_rules {
-    protocol = "6"
-    source   = "0.0.0.0/0"
-
-    tcp_options {
-      max = "22"
-      min = "22"
-    }
-  }
-
-  # IPv6: Allow SSH
-  ingress_security_rules {
-    protocol = "6"
-    source   = "::/0"
-
-    tcp_options {
-      max = "22"
-      min = "22"
     }
   }
 }
@@ -455,7 +470,7 @@ resource "oci_core_instance" "loadbalancers" {
   }
 
   create_vnic_details {
-    subnet_id        = oci_core_subnet.loadbalancers.id
+    subnet_id        = oci_core_subnet.public_lbs.id
     display_name     = "primaryvnic"
     assign_public_ip = true
     hostname_label   = "bom-loadbalancer-${count.index + 1}"
