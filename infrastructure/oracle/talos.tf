@@ -48,6 +48,7 @@ data "talos_machine_configuration" "this" {
         }
       }
       cluster = {
+        allowSchedulingOnControlPlanes = true
         extraManifests = [
           "https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml",
           "https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml"
@@ -60,18 +61,47 @@ data "talos_machine_configuration" "this" {
   ]
 }
 
+resource "null_resource" "talos" {
+  depends_on = [oci_bastion_session.talos_session]
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+  provisioner "local-exec" {
+    command = "sleep 2; ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+  }
+}
+
+resource "null_resource" "k8s_api" {
+  depends_on = [oci_bastion_session.k8s_api_session]
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+  provisioner "local-exec" {
+    command = "sleep 2; ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 ${oci_bastion_session.k8s_api_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+  }
+}
+
 # Bootstrap 1 controlplane
 resource "talos_machine_bootstrap" "this" {
   depends_on = [
     oci_network_load_balancer_backend.talos,
     oci_network_load_balancer_backend.k8s_api,
     oci_bastion_session.k8s_api_session,
-    oci_bastion_session.talos_session
+    oci_bastion_session.talos_session,
+    null_resource.talos
   ]
 
   endpoint             = local.endpoint
   node                 = oci_core_instance.controlplane[0].private_ip
   client_configuration = talos_machine_secrets.this.client_configuration
+}
+
+data "talos_cluster_health" "this" {
+  depends_on = [talos_machine_bootstrap.this, null_resource.talos]
+
+  client_configuration = talos_machine_secrets.this.client_configuration
+  endpoints            = [local.endpoint]
+  control_plane_nodes  = [for instance in oci_core_instance.controlplane : instance.private_ip]
 }
 
 data "talos_client_configuration" "this" {
@@ -85,7 +115,8 @@ data "talos_client_configuration" "this" {
 # Retrieve kubeconfig from talosctl
 resource "talos_cluster_kubeconfig" "this" {
   depends_on = [
-    talos_machine_bootstrap.this
+    talos_machine_bootstrap.this,
+    null_resource.k8s_api
   ]
 
   client_configuration = talos_machine_secrets.this.client_configuration

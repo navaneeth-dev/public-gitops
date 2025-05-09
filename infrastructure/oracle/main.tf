@@ -67,13 +67,14 @@ resource "oci_core_subnet" "public_lbs" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_virtual_network.talos_vcn.id
   cidr_block     = "10.0.70.0/24"
+  ipv6cidr_block = cidrsubnet(oci_core_virtual_network.talos_vcn.ipv6cidr_blocks[0], 8, 0)
 
-  display_name = "public_lbs"
-  dns_label    = "public_lbs"
+  display_name = "publiclbs"
+  dns_label    = "publiclbs"
 
   prohibit_internet_ingress = false
   route_table_id            = oci_core_route_table.internet_routing.id
-  security_list_ids         = [oci_core_security_list.loadbalancers_sec_list.id]
+  security_list_ids         = [oci_core_security_list.public_lbs_sec_list.id]
   dhcp_options_id           = oci_core_virtual_network.talos_vcn.default_dhcp_options_id
 }
 
@@ -146,17 +147,6 @@ resource "oci_core_security_list" "loadbalancers_sec_list" {
       min = "6443"
     }
   }
-
-  # IPv4: Allow SSH from Bastion
-  ingress_security_rules {
-    protocol = "6"
-    source   = "10.0.30.0/24"
-
-    tcp_options {
-      max = "22"
-      min = "22"
-    }
-  }
 }
 
 resource "oci_core_security_list" "public_lbs_sec_list" {
@@ -174,6 +164,17 @@ resource "oci_core_security_list" "public_lbs_sec_list" {
   egress_security_rules {
     protocol    = "all"
     destination = "::/0"
+  }
+
+  # IPv4: Allow SSH from Bastion
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "22"
+      min = "22"
+    }
   }
 
   # IPv4: Allow HTTPS
@@ -251,6 +252,17 @@ resource "oci_core_security_list" "bastion_sec_list" {
     tcp_options {
       max = "6443"
       min = "6443"
+    }
+  }
+
+  # IPv4: Allow SSH traffic
+  ingress_security_rules {
+    protocol = "6"
+    source   = "0.0.0.0/0"
+
+    tcp_options {
+      max = "22"
+      min = "22"
     }
   }
 }
@@ -375,20 +387,18 @@ resource "oci_bastion_bastion" "talos" {
 
 # Talos API Load Balancer Access Bastion
 resource "oci_bastion_session" "talos_session" {
-  bastion_id   = oci_bastion_bastion.talos.id
-  display_name = "Port_Forward_Talos"
+  bastion_id             = oci_bastion_bastion.talos.id
+  display_name           = "Port_Forward_Talos"
+  session_ttl_in_seconds = 60 * 60 * 3
 
   key_details {
     public_key_content = var.ssh_public_key
   }
+
   target_resource_details {
     session_type                       = "PORT_FORWARDING"
     target_resource_private_ip_address = oci_network_load_balancer_network_load_balancer.talos.assigned_private_ipv4
     target_resource_port               = 50000
-  }
-
-  provisioner "local-exec" {
-    command = "sleep 2; ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
   }
 }
 
@@ -405,9 +415,22 @@ resource "oci_bastion_session" "k8s_api_session" {
     target_resource_private_ip_address = oci_network_load_balancer_network_load_balancer.talos.assigned_private_ipv4
     target_resource_port               = 6443
   }
+}
 
-  provisioner "local-exec" {
-    command = "sleep 2; ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 ${oci_bastion_session.k8s_api_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+# Public LBs SSH access for NixOS anywhere
+resource "oci_bastion_session" "nixos_session" {
+  count = var.loadbalancer_count
+
+  bastion_id   = oci_bastion_bastion.talos.id
+  display_name = "Port_Forward_NixOS"
+
+  key_details {
+    public_key_content = var.ssh_public_key
+  }
+  target_resource_details {
+    session_type                       = "PORT_FORWARDING"
+    target_resource_private_ip_address = oci_core_instance.loadbalancers[count.index].private_ip
+    target_resource_port               = 22
   }
 }
 
@@ -475,7 +498,8 @@ resource "oci_core_instance" "loadbalancers" {
     assign_public_ip = true
     hostname_label   = "bom-loadbalancer-${count.index + 1}"
 
-    private_ip = "10.0.60.${count.index + 2}"
+    private_ip    = "10.0.70.${count.index + 2}"
+    assign_ipv6ip = true
   }
 
   source_details {

@@ -6,9 +6,10 @@ tasks:
   default:
     cmds:
       - terraform apply -auto-approve
+      - task: configs
     silent: true
 
-  destory:
+  destroy:
     cmds:
       - terraform destroy -auto-approve
     silent: true
@@ -46,3 +47,4 @@ tasks:
     cmds:
       - terraform output -raw talosconfig > ./talosconfig
       - terraform output -raw kubeconfig > ./kubeconfig
+      - mv ./kubeconfig ~/.kube/config
