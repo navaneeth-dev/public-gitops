@@ -169,7 +169,7 @@ resource "oci_core_security_list" "public_lbs_sec_list" {
   # IPv4: Allow SSH from Bastion
   ingress_security_rules {
     protocol = "6"
-    source   = "0.0.0.0/0"
+    source   = "10.0.30.0/24"
 
     tcp_options {
       max = "22"
