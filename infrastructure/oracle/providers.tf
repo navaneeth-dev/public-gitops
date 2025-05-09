@@ -1,12 +1,12 @@
 terraform {
   required_providers {
     talos = {
-      source = "siderolabs/talos"
+      source  = "siderolabs/talos"
       version = "0.8.0"
     }
 
     oci = {
-      source = "oracle/oci"
+      source  = "oracle/oci"
       version = "6.35.0"
     }
   }
@@ -26,7 +26,7 @@ variable "tenancy_ocid" {
 }
 
 variable "region" {
-    default = "ap-mumbai-1"
+  default = "ap-mumbai-1"
 }
 
 variable "private_key_path" {
