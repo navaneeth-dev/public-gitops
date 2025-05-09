@@ -61,16 +61,18 @@ data "talos_machine_configuration" "this" {
 }
 
 # Bootstrap 1 controlplane
-# resource "talos_machine_bootstrap" "this" {
-#   depends_on = [
-#     oci_network_load_balancer_backend.talos,
-#     oci_network_load_balancer_backend.k8s_api
-#   ]
+resource "talos_machine_bootstrap" "this" {
+  depends_on = [
+    oci_network_load_balancer_backend.talos,
+    oci_network_load_balancer_backend.k8s_api,
+    oci_bastion_session.k8s_api_session,
+    oci_bastion_session.talos_session
+  ]
 
-#   endpoint             = local.endpoint
-#   node                 = oci_core_instance.controlplane[0].private_ip
-#   client_configuration = talos_machine_secrets.this.client_configuration
-# }
+  endpoint             = local.endpoint
+  node                 = oci_core_instance.controlplane[0].private_ip
+  client_configuration = talos_machine_secrets.this.client_configuration
+}
 
 data "talos_client_configuration" "this" {
   cluster_name         = var.cluster_name
@@ -80,10 +82,11 @@ data "talos_client_configuration" "this" {
   nodes     = [for instance in oci_core_instance.controlplane : instance.private_ip]
 }
 
+# Retrieve kubeconfig from talosctl
 resource "talos_cluster_kubeconfig" "this" {
-  # depends_on = [
-  #   talos_machine_bootstrap.this
-  # ]
+  depends_on = [
+    talos_machine_bootstrap.this
+  ]
 
   client_configuration = talos_machine_secrets.this.client_configuration
 
