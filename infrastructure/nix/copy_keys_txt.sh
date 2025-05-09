@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cp -r target/var .
-rm ./var/lib/sops-nix/.gitignore
+mkdir -p var/lib/sops-nix
+cp $HOME/.config/sops/age/keys.txt var/lib/sops-nix/key.txt
