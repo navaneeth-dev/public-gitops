@@ -163,6 +163,12 @@ resource "oci_core_security_list" "public_lbs_sec_list" {
   # IPv6: Allow all egress traffic
   egress_security_rules {
     protocol    = "all"
+    destination = "0.0.0.0/0"
+  }
+
+  # IPv6: Allow all egress traffic
+  egress_security_rules {
+    protocol    = "all"
     destination = "::/0"
   }
 
