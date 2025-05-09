@@ -6,3 +6,4 @@ namespace: argocd
 resources:
 - ./ns.yaml
 - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/ha/install.yaml
+- ./ingress.yaml

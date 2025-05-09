@@ -416,8 +416,9 @@ resource "oci_bastion_session" "talos_session" {
 
 # Kubernetes API Access
 resource "oci_bastion_session" "k8s_api_session" {
-  bastion_id   = oci_bastion_bastion.talos.id
-  display_name = "Port_Forward_K8S_API"
+  bastion_id             = oci_bastion_bastion.talos.id
+  display_name           = "Port_Forward_K8S_API"
+  session_ttl_in_seconds = 60 * 60 * 3
 
   key_details {
     public_key_content = var.ssh_public_key
@@ -433,8 +434,9 @@ resource "oci_bastion_session" "k8s_api_session" {
 resource "oci_bastion_session" "nixos_session" {
   count = var.loadbalancer_count
 
-  bastion_id   = oci_bastion_bastion.talos.id
-  display_name = "Port_Forward_NixOS"
+  bastion_id             = oci_bastion_bastion.talos.id
+  display_name           = "Port_Forward_NixOS"
+  session_ttl_in_seconds = 60 * 60 * 3
 
   key_details {
     public_key_content = var.ssh_public_key
