@@ -6,3 +6,4 @@ namespace: argocd
 resources:
 - ../../infrastructure/kubernetes/bootstrap
 - ./ingress.yaml
+- ./ingress-staging.yaml
