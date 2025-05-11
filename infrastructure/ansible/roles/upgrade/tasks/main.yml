@@ -1,0 +1,25 @@
+---
+- name: Update apt package cache (for Debian/Ubuntu)
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Update all packages to their latest version
+  become: true
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+
+- name: Upgrade the OS (apt-get dist-upgrade)
+  become: true
+  ansible.builtin.apt:
+    upgrade: dist
+
+- name: Reboot the system and wait for it to come back
+  become: true
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30

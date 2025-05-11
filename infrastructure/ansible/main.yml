@@ -2,11 +2,8 @@
 - name: Deploy all public infrastructure services
   hosts: vps
   remote_user: ubuntu
-  # vars:
-  #   read_secret_by_name_within_scope: "{{ lookup('infisical.vault.read_secrets', project_id='e22512bb-7bb2-4e43-bcb0-e058ffccc0cd', path='/', env_slug='prod', secret_name='HOST', url='https://eu.infisical.com') }}"
-  tasks:
-  - name: Update apt package cache (for Debian/Ubuntu)
-    ansible.builtin.apt:
-      update_cache: yes
+  vars:
+    CF_API_TOKEN: "{{ lookup('infisical.vault.read_secrets', project_id='e22512bb-7bb2-4e43-bcb0-e058ffccc0cd', path='/', env_slug='prod', secret_name='CLOUDFLARE_API_TOKEN_SECRET', url='https://eu.infisical.com').value }}"
   roles:
+    # - role: upgrade
     - role: traefik
