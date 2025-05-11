@@ -7,7 +7,7 @@ variable "instance_shape" {
 
 variable "instance_ocpus" { default = 1 }
 
-variable "instance_shape_config_memory_in_gbs" { default = 6 }
+variable "instance_shape_config_memory_in_gbs" { default = 8 }
 
 data "oci_identity_availability_domain" "ad" {
   compartment_id = var.tenancy_ocid
