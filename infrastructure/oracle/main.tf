@@ -294,10 +294,21 @@ resource "oci_core_default_security_list" "default_sec_list" {
     source   = "10.0.10.0/24"
   }
 
-  # IPv4: Allow loadbalancer to talk to Kubenetes API server
+  # IPv4: Allow public loadbalancer to talk to Ingress HTTP
   ingress_security_rules {
     protocol = "6"
-    source   = "0.0.0.0/0"
+    source   = "10.0.70.0/24"
+
+    tcp_options {
+      max = "80"
+      min = "80"
+    }
+  }
+
+  # IPv4: Allow Bastion to talk to Kubenetes API server via NLB
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.30.0/24"
 
     tcp_options {
       max = "6443"
@@ -305,10 +316,10 @@ resource "oci_core_default_security_list" "default_sec_list" {
     }
   }
 
-  # IPv4: Allow loadbalancer to talk to Talos API server
+  # IPv4: Allow Bastion to talk to Talos API server via NLB
   ingress_security_rules {
     protocol = "6"
-    source   = "0.0.0.0/0"
+    source   = "10.0.30.0/24"
 
     tcp_options {
       max = "50000"
@@ -463,7 +474,7 @@ resource "oci_core_instance" "controlplane" {
 
   shape_config {
     ocpus         = var.instance_ocpus
-    memory_in_gbs = var.instance_shape_config_memory_in_gbs
+    memory_in_gbs = count.index == 0 ? var.instance_shape_config_memory_in_gbs - 1 : var.instance_shape_config_memory_in_gbs
   }
 
   create_vnic_details {
@@ -519,6 +530,7 @@ resource "oci_core_instance" "loadbalancers" {
   source_details {
     source_type = "image"
     source_id   = data.oci_core_images.ubuntu.images[0].id
+    # boot_volume_size_in_gbs = 50
   }
 
   metadata = {
@@ -530,8 +542,10 @@ resource "oci_core_instance" "loadbalancers" {
 data "oci_core_images" "ubuntu" {
   compartment_id = var.compartment_ocid
 
-  operating_system = "Canonical Ubuntu"
-  sort_by          = "TIMECREATED"
-  sort_order       = "DESC"
-  shape            = var.loadbalancer_shape
+  operating_system         = "Canonical Ubuntu"
+  operating_system_version = "24.04 Minimal aarch64"
+
+  sort_by    = "TIMECREATED"
+  sort_order = "DESC"
+  shape      = var.loadbalancer_shape
 }
