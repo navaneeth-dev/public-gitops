@@ -9,5 +9,5 @@ variable "loadbalancer_memory" {
 }
 
 variable "loadbalancer_shape" {
-  default = "VM.Standard.E4.Flex"
+  default = "VM.Standard.A1.Flex"
 }
