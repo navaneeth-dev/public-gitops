@@ -294,6 +294,28 @@ resource "oci_core_default_security_list" "default_sec_list" {
     source   = "10.0.10.0/24"
   }
 
+  # IPv4: Allow Healthchecks for Talos from Private LBs
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.60.0/24"
+
+    tcp_options {
+      max = "50000"
+      min = "50000"
+    }
+  }
+
+  # IPv4: Allow Healthchecks for K8S Api from Private LBs
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.60.0/24"
+
+    tcp_options {
+      max = "6443"
+      min = "6443"
+    }
+  }
+
   # IPv4: Allow public loadbalancer to talk to Ingress HTTP
   ingress_security_rules {
     protocol = "6"
