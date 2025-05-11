@@ -1,0 +1,11 @@
+---
+- name: reload systemctl
+  become: yes
+  command: systemctl daemon-reload
+
+- name: restart traefik
+  become: yes
+  ansible.builtin.service:
+    name: traefik.service
+    state: restarted
+    enabled: yes
