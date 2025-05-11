@@ -61,13 +61,18 @@ data "talos_machine_configuration" "this" {
   ]
 }
 
+locals {
+  talos_bastion_user   = "${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+  k8s_api_bastion_user = "${oci_bastion_session.k8s_api_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+}
+
 resource "null_resource" "talos" {
   depends_on = [oci_bastion_session.talos_session]
   triggers = {
     always_run = "${timestamp()}"
   }
   provisioner "local-exec" {
-    command = "sleep 5; ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 ${oci_bastion_session.talos_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+    command = "ssh -S bastion_session_talos -O exit ${local.talos_bastion_user}; ssh -M -S bastion_session_talos -fNL 50000:10.0.60.200:50000 ${local.talos_bastion_user}"
   }
 }
 
@@ -77,7 +82,7 @@ resource "null_resource" "k8s_api" {
     always_run = "${timestamp()}"
   }
   provisioner "local-exec" {
-    command = "sleep 5; ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 ${oci_bastion_session.k8s_api_session.bastion_user_name}@host.bastion.${var.region}.oci.oraclecloud.com"
+    command = "ssh -S bastion_session_k8s_api -O exit ${local.k8s_api_bastion_user}; ssh -M -S bastion_session_k8s_api -fNL 6443:10.0.60.200:6443 ${local.k8s_api_bastion_user}"
   }
 }
 
