@@ -1,9 +1,0 @@
-keys:
-  - &admin_rize age1yjmtq5tn4fqek5re42ut28m8k3p3e7weumhdjje0j2yzf8sgvatsdwcmx3
-  - &server_lb1 age1hwthtxqyunrh8td3lc0a02f0c72r5ecxyqht2kjcznmpzfn9y4yqpmhr4u
-creation_rules:
-  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
-    key_groups:
-    - age:
-      - *admin_rize
-      - *server_lb1
