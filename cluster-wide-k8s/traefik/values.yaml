@@ -4,8 +4,8 @@ deployment:
 service:
   type: NodePort
 
-logs:
-  access:
-    enabled: true
-    format: json
-    bufferingSize: 0
+# logs:
+#   access:
+#     enabled: true
+#     format: json
+#     bufferingSize: 0
