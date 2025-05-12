@@ -1,8 +1,5 @@
 deployment:
-  replicas: 3
-  # ports:
-  #   web:
-  #     redirections:
-  #       entryPoint:
-  #         to: websecure
-  #         scheme: https
+  kind: DaemonSet
+
+service:
+  type: NodePort
