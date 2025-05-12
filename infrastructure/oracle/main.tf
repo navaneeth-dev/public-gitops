@@ -468,24 +468,6 @@ resource "oci_bastion_session" "k8s_api_session" {
   }
 }
 
-# Public LBs SSH access for NixOS anywhere
-resource "oci_bastion_session" "nixos_session" {
-  count = var.loadbalancer_count
-
-  bastion_id             = oci_bastion_bastion.talos.id
-  display_name           = "Port_Forward_NixOS"
-  session_ttl_in_seconds = 60 * 60 * 3
-
-  key_details {
-    public_key_content = var.ssh_public_key
-  }
-  target_resource_details {
-    session_type                       = "PORT_FORWARDING"
-    target_resource_private_ip_address = oci_core_instance.loadbalancers[count.index].private_ip
-    target_resource_port               = 22
-  }
-}
-
 /* Instances */
 variable "talos_image_ocid" {
 }
