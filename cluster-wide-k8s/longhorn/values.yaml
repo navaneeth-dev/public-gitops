@@ -2,6 +2,6 @@ preUpgradeChecker:
   jobEnabled: false
 
 defaultBackupStore:
-  backupTarget: s3://oracle-longhorn@ynm
+  backupTarget: s3://oracle-longhorn
   backupTargetCredentialSecret: longhorn-backup-s3-creds
   pollInterval: 0
