@@ -5,7 +5,7 @@ variable "instance_shape" {
   default = "VM.Standard.A1.Flex"
 }
 
-variable "instance_ocpus" { default = 1 }
+variable "instance_ocpus" { default = 2 }
 
 variable "instance_shape_config_memory_in_gbs" { default = 8 }
 
@@ -169,12 +169,6 @@ resource "oci_core_security_list" "public_lbs_sec_list" {
   # IPv6: Allow all egress traffic
   egress_security_rules {
     protocol    = "all"
-    destination = "0.0.0.0/0"
-  }
-
-  # IPv6: Allow all egress traffic
-  egress_security_rules {
-    protocol    = "all"
     destination = "::/0"
   }
 
@@ -316,14 +310,25 @@ resource "oci_core_default_security_list" "default_sec_list" {
     }
   }
 
-  # IPv4: Allow public loadbalancer to talk to Ingress HTTP
+  # IPv4: Allow public loadbalancer to talk to NodePort HTTP
   ingress_security_rules {
     protocol = "6"
     source   = "10.0.70.0/24"
 
     tcp_options {
-      max = "80"
-      min = "80"
+      max = "32579"
+      min = "32579"
+    }
+  }
+
+  # IPv4: Allow public loadbalancer to talk to NodePort HTTPS
+  ingress_security_rules {
+    protocol = "6"
+    source   = "10.0.70.0/24"
+
+    tcp_options {
+      max = "31258"
+      min = "31258"
     }
   }
 
@@ -496,7 +501,7 @@ resource "oci_core_instance" "controlplane" {
 
   shape_config {
     ocpus         = var.instance_ocpus
-    memory_in_gbs = count.index == 0 ? var.instance_shape_config_memory_in_gbs - 1 : var.instance_shape_config_memory_in_gbs
+    memory_in_gbs = var.instance_shape_config_memory_in_gbs
   }
 
   create_vnic_details {

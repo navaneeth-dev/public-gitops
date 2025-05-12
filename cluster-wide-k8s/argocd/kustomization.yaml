@@ -7,3 +7,6 @@ resources:
 - ../../infrastructure/kubernetes/bootstrap
 - ./ingress.yaml
 - ./ingress-staging.yaml
+
+patches:
+  - path: ./argocd-cmd-params-cm.yaml
