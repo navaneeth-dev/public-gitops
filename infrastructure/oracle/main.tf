@@ -310,10 +310,10 @@ resource "oci_core_default_security_list" "default_sec_list" {
     }
   }
 
-  # IPv4: Allow public loadbalancer to talk to NodePort HTTP
+  # IPv4: Allow Internet to talk to NodePort HTTP
   ingress_security_rules {
     protocol = "6"
-    source   = "10.0.70.0/24"
+    source   = "0.0.0.0/0"
 
     tcp_options {
       max = "32579"
@@ -321,10 +321,10 @@ resource "oci_core_default_security_list" "default_sec_list" {
     }
   }
 
-  # IPv4: Allow public loadbalancer to talk to NodePort HTTPS
+  # IPv4: Allow Internet to talk to NodePort HTTPS
   ingress_security_rules {
     protocol = "6"
-    source   = "10.0.70.0/24"
+    source   = "0.0.0.0/0"
 
     tcp_options {
       max = "31258"
