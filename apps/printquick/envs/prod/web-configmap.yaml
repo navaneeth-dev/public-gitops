@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: web-config
-data:
-  APP_URL: https://printquick.prod.rizexor.com
-  APP_ENV: production
