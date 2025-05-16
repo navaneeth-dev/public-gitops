@@ -420,6 +420,8 @@ resource "oci_network_load_balancer_backend_set" "http_traefik_nlb" {
   }
 }
 
+
+
 resource "oci_network_load_balancer_backend" "k8s_api" {
   count = var.control_plane_count
 
@@ -429,15 +431,25 @@ resource "oci_network_load_balancer_backend" "k8s_api" {
   ip_address               = oci_core_instance.controlplane[count.index].private_ip
 }
 
-resource "oci_network_load_balancer_listener" "k8s_api" {
-  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
-  name                     = "${var.cluster_name}-k8s-api-listener"
-  default_backend_set_name = oci_network_load_balancer_backend_set.k8s_api.name
-  port                     = 6443
-  protocol                 = "TCP"
+resource "oci_network_load_balancer_backend" "http" {
+  count = var.control_plane_count
+
+  backend_set_name         = oci_network_load_balancer_backend_set.http_traefik_nlb.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.traefik_nlb.id
+  port                     = 32579
+  ip_address               = oci_core_instance.controlplane[count.index].private_ip
 }
 
-// Talos load balance
+resource "oci_network_load_balancer_backend" "https" {
+  count = var.control_plane_count
+
+  backend_set_name         = oci_network_load_balancer_backend_set.https_traefik_nlb.name
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.traefik_nlb.id
+  port                     = 31258
+  ip_address               = oci_core_instance.controlplane[count.index].private_ip
+}
+
+// Talos load balancer
 resource "oci_network_load_balancer_backend_set" "talos" {
   name                     = "${var.cluster_name}-talos-backend"
   network_load_balancer_id = oci_network_load_balancer_network_load_balancer.talos.id
