@@ -10,6 +10,4 @@ spec:
         - name: svc
           port: 80
   tls:
-  - hosts:
-    - 'staging.rizexor.com'
     secretName: staging-rizexor-com-tls
