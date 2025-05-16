@@ -364,6 +364,17 @@ resource "oci_network_load_balancer_network_load_balancer" "talos" {
   assigned_private_ipv4 = "10.0.60.200"
 }
 
+resource "oci_network_load_balancer_network_load_balancer" "traefik_nlb" {
+  compartment_id = var.compartment_ocid
+  display_name   = "traefik_ingress_nlb"
+  subnet_id      = oci_core_subnet.public_lbs.id
+  is_private     = false # Make the load balancer private
+  nlb_ip_version = "IPV4_AND_IPV6"
+
+  assigned_ipv6 = cidrhost(oci_core_subnet.public_lbs.ipv6cidr_block, 200)
+  # subnet_ipv6cidr = oci_core_subnet.public_lbs.ipv6cidr_block
+}
+
 // K8S load balance
 resource "oci_network_load_balancer_backend_set" "k8s_api" {
   name                     = "${var.cluster_name}-k8s-api-backend"
@@ -376,6 +387,36 @@ resource "oci_network_load_balancer_backend_set" "k8s_api" {
     protocol           = "HTTPS"
     return_code        = 401
     url_path           = "/readyz"
+  }
+}
+
+// nlb -> HTTP Traefik load balancer
+resource "oci_network_load_balancer_backend_set" "https_traefik_nlb" {
+  name                     = "${var.cluster_name}-traefik_https_nlb"
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.traefik_nlb.id
+  policy                   = "FIVE_TUPLE"
+
+  health_checker {
+    port               = 31258
+    interval_in_millis = 10000
+    protocol           = "HTTPS"
+    return_code        = 404
+    url_path           = "/"
+  }
+}
+
+// nlb -> HTTP Traefik load balancer
+resource "oci_network_load_balancer_backend_set" "http_traefik_nlb" {
+  name                     = "${var.cluster_name}-traefik_http_nlb"
+  network_load_balancer_id = oci_network_load_balancer_network_load_balancer.traefik_nlb.id
+  policy                   = "FIVE_TUPLE"
+
+  health_checker {
+    port               = 32579
+    interval_in_millis = 10000
+    protocol           = "HTTP"
+    return_code        = 404
+    url_path           = "/"
   }
 }
 
