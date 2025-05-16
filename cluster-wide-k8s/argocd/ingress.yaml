@@ -19,5 +19,9 @@ spec:
         - name: argocd-server
           port: 80
           scheme: h2c
-  # tls:
-  #   secretName: prod-rizexor-com-tls
+  tls:
+    secretName: prod-rizexor-com-tls
+    domains:
+    - main: prod.rizexor.com
+      sans:
+      - argocd.prod.rizexor.com

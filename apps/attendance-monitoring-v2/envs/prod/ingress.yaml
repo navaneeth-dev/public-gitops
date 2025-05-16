@@ -10,3 +10,7 @@ spec:
       services:
         - name: svc
           port: 80
+  tls:
+  - main: prod.rizexor.com
+    sans:
+    - attend.prod.rizexor.com
