@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "schedule": [
+    "30 3 * * 5,6,0"
+  ],
   "kubernetes": {
     "fileMatch": ["\\.yaml$"]
   },
