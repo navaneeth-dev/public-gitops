@@ -8,7 +8,7 @@ spec:
     - kind: Rule
       match: Host(`attend.staging.rizexor.com`)
       services:
-        - name: svc
+        - name: attendance-v2-svc
           port: 80
   tls:
     secretName: staging-rizexor-com-tls
