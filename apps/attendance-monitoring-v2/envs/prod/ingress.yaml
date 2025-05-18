@@ -11,6 +11,8 @@ spec:
         - name: svc
           port: 80
   tls:
-  - main: prod.rizexor.com
-    sans:
-    - attend.prod.rizexor.com
+    secretName: prod-rizexor-com-tls
+    domains:
+    - main: prod.rizexor.com
+      sans:
+      - '*.prod.rizexor.com'
