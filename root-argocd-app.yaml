@@ -16,7 +16,7 @@ spec:
   syncPolicy:
     automated: {}
     syncOptions:
-    - CreateNamespace=true  
+    - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -35,23 +35,5 @@ spec:
   syncPolicy:
     automated: {}
     syncOptions:
-    - CreateNamespace=true  
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: fossindia
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/navaneeth-dev/fossindia.git
-    targetRevision: HEAD
-    path: ./
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: fossindia
-  syncPolicy:
-    automated: {}
-    syncOptions:
-    - CreateNamespace=true  
+    - CreateNamespace=true
+
