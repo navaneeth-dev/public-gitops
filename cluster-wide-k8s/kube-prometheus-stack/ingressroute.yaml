@@ -14,7 +14,7 @@ spec:
   tls:
     secretName: prod-fossindia-ovh-tls
     domains:
-      main: 'fossindia.ovh'
+    - main: 'fossindia.ovh'
       sans:
       - '*.fossindia.ovh'
 
