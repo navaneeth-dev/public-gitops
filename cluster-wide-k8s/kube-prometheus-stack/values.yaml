@@ -28,10 +28,11 @@ prometheus:
       size: 1Gi
     ingress:
       enabled: true
+      ingressClassName: traefik
       hosts:
-        - grafana.fossindia.ovh
+      - grafana.fossindia.ovh
       tls:
-        - secretName: prod-fossindia-ovh-tls
+      - secretName: prod-fossindia-ovh-tls
     smtp:
       existingSecret: "smtp-creds"
     grafana.ini:
