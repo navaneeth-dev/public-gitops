@@ -4,5 +4,8 @@ kind: Kustomization
 
 namespace: kube-prometheus-stack
 resources:
+- ./ns.yaml
+- ./smtp-creds.yaml
+- ./ingressroute.yaml
 - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/main/docs/src/samples/monitoring/prometheusrule.yaml
 
