@@ -15,7 +15,7 @@ spec:
   backup:
     barmanObjectStore:
       destinationPath: "s3://oracle-kubernetes/cloudnative-pg-staging"
-      endpointURL: 'https://q7l4.sg.idrivee2-26.com'
+      endpointURL: 'https://s3.ap-south-mum.io.cloud.ovh.net/'
       wal:
         compression: gzip
       s3Credentials:
