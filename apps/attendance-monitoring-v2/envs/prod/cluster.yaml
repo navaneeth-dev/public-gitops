@@ -3,7 +3,7 @@ kind: Cluster
 metadata:
   name: cluster
 spec:
-  instances: 3
+  instances: 1
   backup:
     barmanObjectStore:
       destinationPath: "s3://oracle-kubernetes/cloudnative-pg-prod"

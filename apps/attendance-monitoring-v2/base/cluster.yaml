@@ -4,6 +4,8 @@ metadata:
   name: cluster
 spec:
   instances: 1
+  monitoring:
+    enablePodMonitor: true
   storage:
     storageClass: longhorn-fast
     size: 1Gi
