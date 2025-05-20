@@ -5,7 +5,6 @@ resources:
 - ../../base
 - ingress.yaml
 - sealed-laravel.yaml
-- sealed-aws-secret.yaml
 
 #patches:
 #  - path: sealed-aws-secret.yaml
