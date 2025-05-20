@@ -28,7 +28,7 @@ grafana:
     storageClassName: longhorn
     size: 1Gi
   ingress:
-    enabled: true
+    enabled: false
     hosts:
     - grafana.fossindia.ovh
     tls:
