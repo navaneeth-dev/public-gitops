@@ -1,9 +1,6 @@
 prometheus:
   prometheusSpec:
-    podMonitorSelectorNilUsesHelmValues: false
-    ruleSelectorNilUsesHelmValues: false
-    serviceMonitorSelectorNilUsesHelmValues: false
-    probeSelectorNilUsesHelmValues: false
+    podMonitorNamespaceSelector: {}
     retention: 2d
     retentionSize: 9GB
     storageSpec:
