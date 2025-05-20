@@ -535,7 +535,7 @@ resource "oci_core_instance" "controlplane" {
   fault_domain        = "FAULT-DOMAIN-${count.index + 1}"
 
   shape_config {
-    ocpus         = var.instance_ocpus
+    ocpus         = count.index + 1 == var.control_plane_count ? 2 : var.instance_ocpus
     memory_in_gbs = var.instance_shape_config_memory_in_gbs
   }
 
