@@ -16,6 +16,13 @@ spec:
     - secretKey: user
       remoteRef:
         key: SMTP_USER
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
+
     - secretKey: password
       remoteRef:
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
         key: SMTP_PASSWORD
