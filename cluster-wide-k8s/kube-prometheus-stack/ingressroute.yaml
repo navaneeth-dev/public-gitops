@@ -11,4 +11,10 @@ spec:
       services:
         - name: kube-prometheus-stack-grafana
           port: 80
+  tls:
+    secretName: prod-fossindia-ovh-tls
+    domains:
+      main: 'fossindia.ovh'
+      sans:
+      - '*.fossindia.ovh'
 
