@@ -1,4 +1,9 @@
 terraform {
+  backend "oci" {
+    bucket            = "terraform-state"
+    namespace         = "bm0qttjfmooj"
+  }
+
   required_providers {
     talos = {
       source  = "siderolabs/talos"
