@@ -8,7 +8,7 @@ spec:
   sources:
     - chart: cert-manager
       repoURL: https://charts.jetstack.io
-      targetRevision: v1.18.1
+      targetRevision: v1.18.2
       helm:
         valueFiles:
         - $values/cluster-wide-k8s/cert-manager/values.yaml
