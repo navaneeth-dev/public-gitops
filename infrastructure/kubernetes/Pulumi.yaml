@@ -1,5 +1,5 @@
-name: kubernetes
-description: A minimal Kubernetes TypeScript Pulumi program
+name: oracle
+description: Kubernetes bootstrap configs
 runtime:
   name: nodejs
   options:
