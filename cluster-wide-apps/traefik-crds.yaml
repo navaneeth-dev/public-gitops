@@ -9,7 +9,7 @@ spec:
   source:
     chart: traefik-crds
     repoURL: https://traefik.github.io/charts
-    targetRevision: 1.9.0
+    targetRevision: 1.10.0
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
