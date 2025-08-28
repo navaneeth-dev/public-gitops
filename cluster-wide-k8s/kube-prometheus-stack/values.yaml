@@ -66,9 +66,9 @@ grafana:
   ingress:
     enabled: false
     hosts:
-    - grafana.fossindia.ovh
+    - grafana.prod.rizexor.com
     tls:
-    - secretName: prod-fossindia-ovh-tls
+    - secretName: prod-rizexor-com-tls
   smtp:
     existingSecret: "smtp-creds"
   grafana.ini:
